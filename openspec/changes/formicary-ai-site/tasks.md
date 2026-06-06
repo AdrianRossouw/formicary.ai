@@ -79,12 +79,12 @@
 
 ## 9. About page (feat/about-page)
 
-- [ ] 9.1 Create `about.md` with front matter and content from `docs/_brief/build_spec/formicary-about.md` [REQ-023]
-- [ ] 9.2 Render AI-use disclosure using `{% include epistemic.html label="AI-use disclosure" %}` [REQ-023]
-- [ ] 9.3 Implement two-column is/isn't block with `.col2` and `.isnt-list` [REQ-024]
-- [ ] 9.4 Implement contact section as `dl.bio-grid` with correct email and links [REQ-025]
-- [ ] 9.5 Verify single-column collapse below 720px [REQ-024]
-- [ ] 9.6 Update `docs/traceability.md` for REQ-023, REQ-024, REQ-025
+- [x] 9.1 Create `about.md` with front matter and content from `docs/_brief/build_spec/formicary-about.md` [REQ-023]
+- [x] 9.2 Render AI-use disclosure using `{% include epistemic.html label="AI-use disclosure" %}` [REQ-023]
+- [x] 9.3 Implement two-column is/isn't block with `.col2` and `.isnt-list` [REQ-024]
+- [x] 9.4 Implement contact section as `dl.bio-grid` with correct email and links [REQ-025]
+- [x] 9.5 Verify single-column collapse below 720px [REQ-024]
+- [x] 9.6 Update `docs/traceability.md` for REQ-023, REQ-024, REQ-025
 - [ ] 9.7 Commit (`feat(REQ-023,REQ-024,REQ-025): about page with disclosure and contact`) and merge to `main`
 
 ## 10. Stretch: CI traceability check
