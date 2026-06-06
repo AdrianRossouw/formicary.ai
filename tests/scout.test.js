@@ -3,6 +3,10 @@ import { parseFeed, parseSummaryHtml, extractScore, filterItems } from '../asset
 
 // ─── Fixture Atom XML (captured from live feed) ───────────────────────────────
 
+function escXml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 const FIXTURE_SUMMARY_1 = `<div style="font-family:-apple-system,sans-serif;line-height:1.6;max-width:680px;">
 <p style="font-size:0.75em;font-weight:600;opacity:0.45;text-transform:uppercase;">Originally published 6 June 2026</p>
 <p style="font-size:0.95em;opacity:0.85;margin:0 0 4px;">Saturn CI's Jason Swett published a concrete TDD skill for AI agents using a &quot;specify-encode-fulfill&quot; loop.</p>
@@ -45,21 +49,21 @@ const FIXTURE_ATOM = `<?xml version="1.0" encoding="UTF-8"?>
     <link href="https://example.com/tdd" rel="alternate"/>
     <id>https://example.com/tdd</id>
     <updated>2026-06-06T08:06:43Z</updated>
-    <summary type="html">${FIXTURE_SUMMARY_1.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</summary>
+    <summary type="html">${escXml(FIXTURE_SUMMARY_1)}</summary>
   </entry>
   <entry>
     <title>AI Agent Uncovers Zero-Days</title>
     <link href="https://example.com/zeroday" rel="alternate"/>
     <id>https://example.com/zeroday</id>
     <updated>2026-06-06T08:06:38Z</updated>
-    <summary type="html">${FIXTURE_SUMMARY_4.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</summary>
+    <summary type="html">${escXml(FIXTURE_SUMMARY_4)}</summary>
   </entry>
   <entry>
     <title>Miasma Wave 5</title>
     <link href="https://example.com/miasma" rel="alternate"/>
     <id>https://example.com/miasma</id>
     <updated>2026-06-06T08:06:27Z</updated>
-    <summary type="html">${FIXTURE_SUMMARY_5.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</summary>
+    <summary type="html">${escXml(FIXTURE_SUMMARY_5)}</summary>
   </entry>
 </feed>`;
 

@@ -10,28 +10,18 @@ const LABELS = { 5: 'Direct impact', 4: 'Highly relevant', 3: 'Worth tracking' }
  */
 export function parseSummaryHtml(htmlString) {
   const doc = new DOMParser().parseFromString(htmlString, 'text/html');
-  const paras = Array.from(doc.querySelectorAll('p'));
-
-  // First <p>: "Originally published D Month YYYY"
-  const pubRaw = paras[0] ? paras[0].textContent.trim() : '';
-  const pubMatch = pubRaw.match(/published\s+(.+)$/i);
+  const text = el => el?.textContent?.trim() ?? '';
+  const paras = doc.querySelectorAll('p');
+  const pubMatch = text(paras[0]).match(/published\s+(.+)$/i);
   const publishedDate = pubMatch ? pubMatch[1].trim() : '';
-
-  // Second <p>: article brief / analysis
-  const analysis = paras[1] ? paras[1].textContent.trim() : '';
-
-  // Inner div: Scout annotation block
+  const analysis = text(paras[1]);
   const block = doc.querySelector('div div');
-  const blockParas = block ? Array.from(block.querySelectorAll('p')) : [];
-
-  const scoreLine = blockParas[0] ? blockParas[0].textContent.trim() : '';
-  const rationale = blockParas[1] ? blockParas[1].textContent.trim() : '';
-
-  const tagPara = blockParas[2];
-  const tags = tagPara
-    ? Array.from(tagPara.querySelectorAll('span')).map(s => s.textContent.trim())
+  const blockParas = block ? block.querySelectorAll('p') : [];
+  const scoreLine = text(blockParas[0]);
+  const rationale = text(blockParas[1]);
+  const tags = blockParas[2]
+    ? Array.from(blockParas[2].querySelectorAll('span')).map(s => s.textContent.trim())
     : [];
-
   return { publishedDate, analysis, scoreLine, rationale, tags };
 }
 
@@ -52,26 +42,20 @@ export function extractScore(scoreLine) {
 export function parseFeed(xmlString) {
   const doc = new DOMParser().parseFromString(xmlString, 'application/xml');
   if (doc.querySelector('parsererror')) throw new Error('Feed XML could not be parsed');
-
   const ns = 'http://www.w3.org/2005/Atom';
   const entries = Array.from(doc.getElementsByTagNameNS(ns, 'entry'));
-
   const items = entries.map(entry => {
-    const title = (entry.getElementsByTagNameNS(ns, 'title')[0] || {}).textContent || '';
-    const linkEl = entry.getElementsByTagNameNS(ns, 'link')[0];
-    const url = linkEl ? linkEl.getAttribute('href') : '';
-    const updated = (entry.getElementsByTagNameNS(ns, 'updated')[0] || {}).textContent || '';
-    const summaryEl = entry.getElementsByTagNameNS(ns, 'summary')[0];
-    const summaryHtml = summaryEl ? summaryEl.textContent : '';
-
+    const el = name => entry.getElementsByTagNameNS(ns, name)[0];
+    const title = el('title')?.textContent?.trim() ?? '';
+    const url = el('link')?.getAttribute('href') ?? '';
+    const updated = el('updated')?.textContent ?? '';
+    const summaryHtml = el('summary')?.textContent ?? '';
     let domain = '';
     try { domain = new URL(url).hostname.replace(/^www\./, ''); } catch (_) {}
-
     const parsed = parseSummaryHtml(summaryHtml);
     const { score, label } = extractScore(parsed.scoreLine);
-
     return {
-      title: title.trim(),
+      title,
       url,
       domain,
       updated,
@@ -83,7 +67,6 @@ export function parseFeed(xmlString) {
       label: label || LABELS[score] || '',
     };
   });
-
   return items.sort((a, b) => (a.updated < b.updated ? 1 : -1));
 }
 
@@ -93,14 +76,20 @@ export function parseFeed(xmlString) {
 export function filterItems(items, relFilter, tagFilters) {
   return items.filter(item => {
     const relMatch = relFilter === 'all' || String(item.score) === relFilter;
-    const tagMatch =
-      !tagFilters || tagFilters.length === 0 ||
-      tagFilters.some(t => item.tags.includes(t));
+    const tagMatch = tagFilters.length === 0 || tagFilters.some(t => item.tags.includes(t));
     return relMatch && tagMatch;
   });
 }
 
 // ─── DOM renderer ─────────────────────────────────────────────────────────────
+
+function externalLink(href) {
+  const a = document.createElement('a');
+  a.href = href;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  return a;
+}
 
 function pips(score) {
   const span = document.createElement('span');
@@ -128,39 +117,29 @@ function makeCard(item, onTagClick) {
   li.className = 'feed__item';
   li.dataset.score = item.score;
 
-  // Title
   const h2 = document.createElement('h2');
   h2.className = 'feed__title';
-  const a = document.createElement('a');
-  a.href = item.url;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  a.textContent = item.title;
-  h2.appendChild(a);
+  const titleLink = externalLink(item.url);
+  titleLink.textContent = item.title;
+  h2.appendChild(titleLink);
 
-  // Meta: signal + date
   const meta = document.createElement('div');
   meta.className = 'feed__meta';
-
   const signal = document.createElement('span');
   signal.className = 'signal';
   const labelSpan = document.createElement('span');
   labelSpan.className = 'signal__label';
   labelSpan.textContent = (item.label || LABELS[item.score] || '').toUpperCase() + ' · ' + item.score + '/5';
   signal.append(pips(item.score), labelSpan);
-
   const dateSpan = document.createElement('span');
   dateSpan.className = 'feed__date';
   dateSpan.textContent = 'scouted ' + fmtDate(item.updated);
-
   meta.append(signal, dateSpan);
 
-  // Analysis
   const analysis = document.createElement('p');
   analysis.className = 'feed__analysis';
   analysis.textContent = item.analysis;
 
-  // Rationale (optional)
   let rationaleEl = null;
   if (item.rationale) {
     rationaleEl = document.createElement('p');
@@ -170,24 +149,18 @@ function makeCard(item, onTagClick) {
     rationaleEl.append(b, ' ' + item.rationale);
   }
 
-  // Footer: source + tags
   const foot = document.createElement('div');
   foot.className = 'feed__foot';
-
   const source = document.createElement('span');
   source.className = 'feed__source';
   const arrow = document.createElement('span');
   arrow.className = 'arrow';
   arrow.setAttribute('aria-hidden', 'true');
   arrow.textContent = '→';
-  const srcLink = document.createElement('a');
-  srcLink.href = item.url;
-  srcLink.target = '_blank';
-  srcLink.rel = 'noopener';
-  const srcText = item.published
+  const srcLink = externalLink(item.url);
+  srcLink.textContent = item.published
     ? item.domain + ' · published ' + item.published
     : item.domain;
-  srcLink.textContent = srcText;
   source.append(arrow, srcLink);
 
   const tagsSpan = document.createElement('span');
@@ -204,7 +177,6 @@ function makeCard(item, onTagClick) {
   });
 
   foot.append(source, tagsSpan);
-
   li.append(h2, meta, analysis);
   if (rationaleEl) li.appendChild(rationaleEl);
   li.appendChild(foot);
@@ -213,30 +185,23 @@ function makeCard(item, onTagClick) {
 
 export function init() {
   const streamEl = document.getElementById('stream');
-  const readoutEl = document.getElementById('readout');
   const relGroup = document.getElementById('rel-group');
   const tagGroup = document.getElementById('tag-group');
   const showingEl = document.getElementById('showing');
   const roLast = document.getElementById('ro-last');
   const roCount = document.getElementById('ro-count');
+  const filtersEl = document.getElementById('filters');
 
   if (!streamEl) return;
 
   let allItems = [];
   const state = { rel: 'all', tags: [] };
 
-  function getTagFilters() {
-    return Array.from(tagGroup.querySelectorAll('[data-tag][aria-pressed="true"]'))
-      .map(b => b.dataset.tag);
-  }
-
   function render() {
-    const shown = filterItems(allItems, state.rel, getTagFilters());
-
+    const shown = filterItems(allItems, state.rel, state.tags);
     if (showingEl) {
       showingEl.textContent = 'Showing ' + shown.length + ' of ' + allItems.length;
     }
-
     streamEl.innerHTML = '';
     if (!shown.length) {
       const empty = document.createElement('li');
@@ -245,7 +210,6 @@ export function init() {
       streamEl.appendChild(empty);
       return;
     }
-
     const frag = document.createDocumentFragment();
     shown.forEach(item => frag.appendChild(makeCard(item, toggleTag)));
     streamEl.appendChild(frag);
@@ -255,15 +219,12 @@ export function init() {
     const i = state.tags.indexOf(tag);
     if (i >= 0) state.tags.splice(i, 1); else state.tags.push(tag);
     tagGroup.querySelectorAll('[data-tag]').forEach(b => {
-      const pressed = state.tags.includes(b.dataset.tag);
-      b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+      b.setAttribute('aria-pressed', state.tags.includes(b.dataset.tag) ? 'true' : 'false');
     });
     render();
-    const filtersTop = document.getElementById('filters');
-    if (filtersTop) window.scrollTo({ top: filtersTop.offsetTop - 80, behavior: 'smooth' });
+    if (filtersEl) window.scrollTo({ top: filtersEl.offsetTop - 80, behavior: 'smooth' });
   }
 
-  // Relevance chip group
   if (relGroup) {
     relGroup.addEventListener('click', e => {
       const btn = e.target.closest('[data-rel]');
@@ -276,13 +237,6 @@ export function init() {
     });
   }
 
-  // Loading state
-  streamEl.innerHTML = '';
-  const loadingLi = document.createElement('li');
-  loadingLi.className = 'feed__empty';
-  loadingLi.textContent = 'Loading…';
-  streamEl.appendChild(loadingLi);
-
   fetch(FEED_URL)
     .then(r => {
       if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -291,18 +245,11 @@ export function init() {
     .then(xml => {
       allItems = parseFeed(xml);
 
-      // Populate readout chrome
-      if (roLast && allItems[0]) {
-        const d = new Date(allItems[0].updated);
-        if (!isNaN(d)) {
-          const p = n => (n < 10 ? '0' : '') + n;
-          roLast.textContent = d.getUTCFullYear() + '-' + p(d.getUTCMonth() + 1) + '-' +
-            p(d.getUTCDate()) + ' ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ' UTC';
-        }
+      if (roLast && allItems[0]?.updated) {
+        roLast.textContent = allItems[0].updated.slice(0, 16).replace('T', ' ') + ' UTC';
       }
       if (roCount) roCount.textContent = allItems.length + ' items';
 
-      // Build tag chips sorted by frequency
       const tagFreq = {};
       allItems.forEach(it => it.tags.forEach(t => { tagFreq[t] = (tagFreq[t] || 0) + 1; }));
       const tagNames = Object.keys(tagFreq).sort((a, b) => tagFreq[b] - tagFreq[a]);
