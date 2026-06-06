@@ -2,45 +2,42 @@
 const FEED_URL =
   'https://gist.githubusercontent.com/AdrianRossouw/8cd844ca87b6526ba6d74bf171c5a788/raw/feed.xml';
 
-// REL options for the single-select relevance filter
-const REL_LEVELS = [
-  { value: 'all', label: 'All' },
-  { value: '3', label: '3/5 Worth tracking' },
-  { value: '4', label: '4/5 Highly relevant' },
-  { value: '5', label: '5/5 Direct impact' },
-];
+const LABELS = { 5: 'Direct impact', 4: 'Highly relevant', 3: 'Worth tracking' };
 
 /**
- * Parse the inner <div> block from the summary HTML and extract
- * analysis, scoreLine, rationale, and tags as plain text (no innerHTML).
- * REQ-004: all field values come from textContent only.
+ * Parse the inner Scout annotation block from summary HTML.
+ * All field values come from textContent only — no innerHTML (REQ-004).
  */
 export function parseSummaryHtml(htmlString) {
   const doc = new DOMParser().parseFromString(htmlString, 'text/html');
   const paras = Array.from(doc.querySelectorAll('p'));
 
-  // The second <p> (index 1) is the article brief / analysis
+  // First <p>: "Originally published D Month YYYY"
+  const pubRaw = paras[0] ? paras[0].textContent.trim() : '';
+  const pubMatch = pubRaw.match(/published\s+(.+)$/i);
+  const publishedDate = pubMatch ? pubMatch[1].trim() : '';
+
+  // Second <p>: article brief / analysis
   const analysis = paras[1] ? paras[1].textContent.trim() : '';
 
-  // The inner div block contains the Scout annotation
+  // Inner div: Scout annotation block
   const block = doc.querySelector('div div');
   const blockParas = block ? Array.from(block.querySelectorAll('p')) : [];
 
   const scoreLine = blockParas[0] ? blockParas[0].textContent.trim() : '';
   const rationale = blockParas[1] ? blockParas[1].textContent.trim() : '';
 
-  // Tags are inline spans in the third <p> of the block
   const tagPara = blockParas[2];
   const tags = tagPara
     ? Array.from(tagPara.querySelectorAll('span')).map(s => s.textContent.trim())
     : [];
 
-  return { analysis, scoreLine, rationale, tags };
+  return { publishedDate, analysis, scoreLine, rationale, tags };
 }
 
 /**
- * Parse a score integer (3, 4, or 5) and label from a Scout score line.
- * Input example: "🐜 Scout — 🟡 3/5 — Worth tracking"
+ * Parse score integer (3, 4, 5) and label from a Scout score line.
+ * e.g. "🐜 Scout — 🟡 3/5 — Worth tracking"
  */
 export function extractScore(scoreLine) {
   const match = scoreLine.match(/(\d)\/5\s*[—\-–]\s*(.+)/);
@@ -49,25 +46,26 @@ export function extractScore(scoreLine) {
 }
 
 /**
- * Parse an Atom XML string into an array of item objects, sorted newest-first.
- * All text values come from textContent only (REQ-004).
+ * Parse Atom XML into items sorted newest-first.
+ * All text from textContent only (REQ-004).
  */
 export function parseFeed(xmlString) {
   const doc = new DOMParser().parseFromString(xmlString, 'application/xml');
-  const parserError = doc.querySelector('parsererror');
-  if (parserError) throw new Error('Feed XML could not be parsed');
+  if (doc.querySelector('parsererror')) throw new Error('Feed XML could not be parsed');
 
   const ns = 'http://www.w3.org/2005/Atom';
   const entries = Array.from(doc.getElementsByTagNameNS(ns, 'entry'));
 
   const items = entries.map(entry => {
     const title = (entry.getElementsByTagNameNS(ns, 'title')[0] || {}).textContent || '';
-    const link = entry.getElementsByTagNameNS(ns, 'link')[0];
-    const url = link ? link.getAttribute('href') : '';
-    const updatedEl = entry.getElementsByTagNameNS(ns, 'updated')[0];
-    const updated = updatedEl ? updatedEl.textContent.trim() : '';
+    const linkEl = entry.getElementsByTagNameNS(ns, 'link')[0];
+    const url = linkEl ? linkEl.getAttribute('href') : '';
+    const updated = (entry.getElementsByTagNameNS(ns, 'updated')[0] || {}).textContent || '';
     const summaryEl = entry.getElementsByTagNameNS(ns, 'summary')[0];
     const summaryHtml = summaryEl ? summaryEl.textContent : '';
+
+    let domain = '';
+    try { domain = new URL(url).hostname.replace(/^www\./, ''); } catch (_) {}
 
     const parsed = parseSummaryHtml(summaryHtml);
     const { score, label } = extractScore(parsed.scoreLine);
@@ -75,24 +73,22 @@ export function parseFeed(xmlString) {
     return {
       title: title.trim(),
       url,
+      domain,
       updated,
+      published: parsed.publishedDate,
       analysis: parsed.analysis,
       rationale: parsed.rationale,
       tags: parsed.tags,
       score,
-      scoreLabel: label,
+      label: label || LABELS[score] || '',
     };
   });
 
-  // Newest-first (REQ-003)
   return items.sort((a, b) => (a.updated < b.updated ? 1 : -1));
 }
 
 /**
- * Filter items by relevance score and/or tags.
- * relFilter: '3', '4', '5', or 'all' (single-select)
- * tagFilters: array of tag strings — OR logic (item matches if it has ANY selected tag)
- * Combined rel + tag: AND logic (REQ-022)
+ * Filter by relevance (single-select) AND tags (OR logic). REQ-022.
  */
 export function filterItems(items, relFilter, tagFilters) {
   return items.filter(item => {
@@ -106,149 +102,186 @@ export function filterItems(items, relFilter, tagFilters) {
 
 // ─── DOM renderer ─────────────────────────────────────────────────────────────
 
-function scoreEmoji(score) {
-  if (score === 5) return '🔴';
-  if (score === 4) return '🟠';
-  return '🟡';
+function pips(score) {
+  const span = document.createElement('span');
+  span.className = 'signal__pips';
+  span.setAttribute('aria-hidden', 'true');
+  for (let i = 1; i <= 5; i++) {
+    const pip = document.createElement('span');
+    pip.className = 'signal__pip';
+    pip.dataset.on = i <= score ? '1' : '0';
+    span.appendChild(pip);
+  }
+  return span;
 }
 
-function makeCard(item) {
+function fmtDate(iso) {
+  try {
+    return new Date(iso).toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric',
+    });
+  } catch (_) { return iso || ''; }
+}
+
+function makeCard(item, onTagClick) {
   const li = document.createElement('li');
   li.className = 'feed__item';
-  if (item.score === 5) li.dataset.impact = 'direct';
+  li.dataset.score = item.score;
 
-  const header = document.createElement('div');
-  header.className = 'feed__item-head';
-
-  const meta = document.createElement('p');
-  meta.className = 'feed__meta mono';
-  const scoreSpan = document.createElement('span');
-  scoreSpan.className = 'feed__score';
-  scoreSpan.textContent = scoreEmoji(item.score) + ' ' + item.score + '/5';
-  const labelSpan = document.createElement('span');
-  labelSpan.className = 'feed__label';
-  labelSpan.textContent = item.scoreLabel;
-  meta.append(scoreSpan, ' ', labelSpan);
-
+  // Title
   const h2 = document.createElement('h2');
   h2.className = 'feed__title';
   const a = document.createElement('a');
   a.href = item.url;
-  a.rel = 'noopener noreferrer';
   a.target = '_blank';
+  a.rel = 'noopener';
   a.textContent = item.title;
   h2.appendChild(a);
 
-  header.append(meta, h2);
+  // Meta: signal + date
+  const meta = document.createElement('div');
+  meta.className = 'feed__meta';
 
+  const signal = document.createElement('span');
+  signal.className = 'signal';
+  const labelSpan = document.createElement('span');
+  labelSpan.className = 'signal__label';
+  labelSpan.textContent = (item.label || LABELS[item.score] || '').toUpperCase() + ' · ' + item.score + '/5';
+  signal.append(pips(item.score), labelSpan);
+
+  const dateSpan = document.createElement('span');
+  dateSpan.className = 'feed__date';
+  dateSpan.textContent = 'scouted ' + fmtDate(item.updated);
+
+  meta.append(signal, dateSpan);
+
+  // Analysis
   const analysis = document.createElement('p');
   analysis.className = 'feed__analysis';
   analysis.textContent = item.analysis;
 
-  const rationale = document.createElement('p');
-  rationale.className = 'feed__rationale';
-  rationale.textContent = item.rationale;
+  // Rationale (optional)
+  let rationaleEl = null;
+  if (item.rationale) {
+    rationaleEl = document.createElement('p');
+    rationaleEl.className = 'feed__rationale';
+    const b = document.createElement('b');
+    b.textContent = 'Scored ' + item.score + '/5.';
+    rationaleEl.append(b, ' ' + item.rationale);
+  }
 
-  const footer = document.createElement('div');
-  footer.className = 'feed__item-foot';
+  // Footer: source + tags
+  const foot = document.createElement('div');
+  foot.className = 'feed__foot';
 
-  const time = document.createElement('time');
-  time.className = 'feed__time mono';
-  time.dateTime = item.updated;
-  time.textContent = item.updated.slice(0, 10);
+  const source = document.createElement('span');
+  source.className = 'feed__source';
+  const arrow = document.createElement('span');
+  arrow.className = 'arrow';
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.textContent = '→';
+  const srcLink = document.createElement('a');
+  srcLink.href = item.url;
+  srcLink.target = '_blank';
+  srcLink.rel = 'noopener';
+  const srcText = item.published
+    ? item.domain + ' · published ' + item.published
+    : item.domain;
+  srcLink.textContent = srcText;
+  source.append(arrow, srcLink);
 
-  const tagList = document.createElement('ul');
-  tagList.className = 'feed__tags';
+  const tagsSpan = document.createElement('span');
+  tagsSpan.className = 'feed__tags';
   item.tags.forEach(tag => {
-    const tagLi = document.createElement('li');
-    tagLi.className = 'feed__tag';
-    tagLi.textContent = tag;
-    tagList.appendChild(tagLi);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tag';
+    btn.dataset.tag = tag;
+    btn.setAttribute('aria-pressed', 'false');
+    btn.textContent = tag;
+    btn.addEventListener('click', () => onTagClick(tag));
+    tagsSpan.appendChild(btn);
   });
 
-  footer.append(time, tagList);
-  li.append(header, analysis, rationale, footer);
+  foot.append(source, tagsSpan);
+
+  li.append(h2, meta, analysis);
+  if (rationaleEl) li.appendChild(rationaleEl);
+  li.appendChild(foot);
   return li;
 }
 
-function setState(feedEl, readoutEl, state, message) {
-  feedEl.innerHTML = '';
-  if (state === 'loading') {
-    const p = document.createElement('p');
-    p.className = 'feed__status';
-    p.setAttribute('aria-live', 'polite');
-    p.textContent = 'Loading feed...';
-    feedEl.appendChild(p);
-    if (readoutEl) readoutEl.textContent = '';
-  } else if (state === 'error') {
-    const p = document.createElement('p');
-    p.className = 'feed__status feed__status--error';
-    p.setAttribute('role', 'alert');
-    p.textContent = message || 'Feed unavailable. Please try again later.';
-    feedEl.appendChild(p);
-    if (readoutEl) readoutEl.textContent = '';
-  } else if (state === 'empty') {
-    const p = document.createElement('p');
-    p.className = 'feed__status';
-    p.textContent = 'No items match current filters.';
-    feedEl.appendChild(p);
-    if (readoutEl) readoutEl.textContent = '0 items';
-  }
-}
-
-function renderItems(feedEl, readoutEl, items) {
-  feedEl.innerHTML = '';
-  if (items.length === 0) {
-    setState(feedEl, readoutEl, 'empty');
-    return;
-  }
-  const frag = document.createDocumentFragment();
-  items.forEach(item => frag.appendChild(makeCard(item)));
-  feedEl.appendChild(frag);
-  if (readoutEl) readoutEl.textContent = items.length + ' item' + (items.length === 1 ? '' : 's');
-}
-
-function collectTagFilters(container) {
-  return Array.from(container.querySelectorAll('[data-tag-filter].active'))
-    .map(el => el.dataset.tagFilter);
-}
-
-function buildTagButtons(items, tagContainer, onFilter) {
-  const allTags = [...new Set(items.flatMap(i => i.tags))].sort();
-  tagContainer.innerHTML = '';
-  allTags.forEach(tag => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'filter__tag';
-    btn.dataset.tagFilter = tag;
-    btn.textContent = tag;
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('active');
-      onFilter();
-    });
-    tagContainer.appendChild(btn);
-  });
-}
-
 export function init() {
-  const feedEl = document.getElementById('scout-feed');
-  const readoutEl = document.getElementById('scout-readout');
-  const relSelect = document.getElementById('scout-rel-filter');
-  const tagContainer = document.getElementById('scout-tag-filters');
+  const streamEl = document.getElementById('stream');
+  const readoutEl = document.getElementById('readout');
+  const relGroup = document.getElementById('rel-group');
+  const tagGroup = document.getElementById('tag-group');
+  const showingEl = document.getElementById('showing');
+  const roLast = document.getElementById('ro-last');
+  const roCount = document.getElementById('ro-count');
 
-  if (!feedEl) return;
-
-  setState(feedEl, readoutEl, 'loading');
+  if (!streamEl) return;
 
   let allItems = [];
+  const state = { rel: 'all', tags: [] };
 
-  function applyFilters() {
-    const relFilter = relSelect ? relSelect.value : 'all';
-    const tagFilters = tagContainer ? collectTagFilters(tagContainer) : [];
-    renderItems(feedEl, readoutEl, filterItems(allItems, relFilter, tagFilters));
+  function getTagFilters() {
+    return Array.from(tagGroup.querySelectorAll('[data-tag][aria-pressed="true"]'))
+      .map(b => b.dataset.tag);
   }
 
-  if (relSelect) relSelect.addEventListener('change', applyFilters);
+  function render() {
+    const shown = filterItems(allItems, state.rel, getTagFilters());
+
+    if (showingEl) {
+      showingEl.textContent = 'Showing ' + shown.length + ' of ' + allItems.length;
+    }
+
+    streamEl.innerHTML = '';
+    if (!shown.length) {
+      const empty = document.createElement('li');
+      empty.className = 'feed__empty';
+      empty.textContent = 'No items match this filter. Loosen it.';
+      streamEl.appendChild(empty);
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    shown.forEach(item => frag.appendChild(makeCard(item, toggleTag)));
+    streamEl.appendChild(frag);
+  }
+
+  function toggleTag(tag) {
+    const i = state.tags.indexOf(tag);
+    if (i >= 0) state.tags.splice(i, 1); else state.tags.push(tag);
+    tagGroup.querySelectorAll('[data-tag]').forEach(b => {
+      const pressed = state.tags.includes(b.dataset.tag);
+      b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    });
+    render();
+    const filtersTop = document.getElementById('filters');
+    if (filtersTop) window.scrollTo({ top: filtersTop.offsetTop - 80, behavior: 'smooth' });
+  }
+
+  // Relevance chip group
+  if (relGroup) {
+    relGroup.addEventListener('click', e => {
+      const btn = e.target.closest('[data-rel]');
+      if (!btn) return;
+      state.rel = btn.dataset.rel;
+      relGroup.querySelectorAll('[data-rel]').forEach(b => {
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      });
+      render();
+    });
+  }
+
+  // Loading state
+  streamEl.innerHTML = '';
+  const loadingLi = document.createElement('li');
+  loadingLi.className = 'feed__empty';
+  loadingLi.textContent = 'Loading…';
+  streamEl.appendChild(loadingLi);
 
   fetch(FEED_URL)
     .then(r => {
@@ -257,11 +290,47 @@ export function init() {
     })
     .then(xml => {
       allItems = parseFeed(xml);
-      if (tagContainer) buildTagButtons(allItems, tagContainer, applyFilters);
-      applyFilters();
+
+      // Populate readout chrome
+      if (roLast && allItems[0]) {
+        const d = new Date(allItems[0].updated);
+        if (!isNaN(d)) {
+          const p = n => (n < 10 ? '0' : '') + n;
+          roLast.textContent = d.getUTCFullYear() + '-' + p(d.getUTCMonth() + 1) + '-' +
+            p(d.getUTCDate()) + ' ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ' UTC';
+        }
+      }
+      if (roCount) roCount.textContent = allItems.length + ' items';
+
+      // Build tag chips sorted by frequency
+      const tagFreq = {};
+      allItems.forEach(it => it.tags.forEach(t => { tagFreq[t] = (tagFreq[t] || 0) + 1; }));
+      const tagNames = Object.keys(tagFreq).sort((a, b) => tagFreq[b] - tagFreq[a]);
+      tagGroup.querySelectorAll('[data-tag]').forEach(el => el.remove());
+      tagNames.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip';
+        btn.dataset.tag = tag;
+        btn.setAttribute('aria-pressed', 'false');
+        const count = document.createElement('span');
+        count.className = 'chip__count';
+        count.textContent = tagFreq[tag];
+        btn.textContent = tag;
+        btn.appendChild(count);
+        btn.addEventListener('click', () => toggleTag(tag));
+        tagGroup.appendChild(btn);
+      });
+
+      render();
     })
     .catch(err => {
-      setState(feedEl, readoutEl, 'error');
+      streamEl.innerHTML = '';
+      const errLi = document.createElement('li');
+      errLi.className = 'feed__empty';
+      errLi.setAttribute('role', 'alert');
+      errLi.textContent = 'Feed unavailable. Please try again later.';
+      streamEl.appendChild(errLi);
       console.error('Scout feed error:', err);
     });
 }
