@@ -94,5 +94,5 @@
 
 ## 11. Simplify
 
-- [ ] 11.1 Run `/simplify` across the codebase
-- [ ] 11.2 Commit simplifications in a dedicated commit, separate from feature work
+- [x] 11.1 Run `/simplify` across the codebase
+- [x] 11.2 Commit simplifications in a dedicated commit, separate from feature work
