@@ -42,3 +42,4 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-036 | REQ-004 safety assertion | `tests/scout.test.js` | Automated: `npm test` — XSS safety test passes |
 | REQ-037 | Favicon declarations | `_layouts/default.html`, `favicon.svg`, `favicon-16.png`, `favicon-32.png`, `favicon-48.png`, `apple-touch-icon.png` | Manual: inspect `<head>` for all five link tags; confirm files present in `_site/` after build |
 | REQ-038 | Sitemap generation | `Gemfile`, `_config.yml` | Manual: `bundle exec jekyll build` then confirm `_site/sitemap.xml` exists and lists all pages |
+| REQ-039 | Scout feed format contract | `docs/scout-feed-format.md`, `assets/js/scout.js` | Manual: confirm document exists and matches parsing logic in `parseFeed` and `parseSummaryHtml` |
