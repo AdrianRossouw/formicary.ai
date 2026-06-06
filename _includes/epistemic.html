@@ -1,11 +1,19 @@
 <aside class="epistemic" aria-label="{{ include.label }}">
   <p class="epistemic__label">{{ include.label }}</p>
-  {% if include.fields %}
+  {% if include.status or include.confidence or include.last_revised %}
   <dl class="epistemic__fields">
-    {% for field in include.fields %}
-    <dt>{{ field[0] }}</dt>
-    <dd>{{ field[1] }}</dd>
-    {% endfor %}
+    {% if include.status %}
+    <dt>Status</dt>
+    <dd>{{ include.status }}</dd>
+    {% endif %}
+    {% if include.confidence %}
+    <dt>Confidence</dt>
+    <dd>{{ include.confidence }}</dd>
+    {% endif %}
+    {% if include.last_revised %}
+    <dt>Last revised</dt>
+    <dd>{{ include.last_revised }}</dd>
+    {% endif %}
   </dl>
   {% endif %}
   {% if include.note %}
