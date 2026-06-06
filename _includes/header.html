@@ -1,0 +1,20 @@
+<header class="site-head" role="banner">
+  <div class="shell site-head__row">
+    <a class="wordmark" href="/">formicary</a>
+    <div class="site-head__right">
+      <nav class="nav" aria-label="Site">
+        <a href="/"      {% if page.url == '/' or page.url == '/index.html' %}aria-current="page"{% endif %}>Thesis</a>
+        <a href="/scout" {% if page.url contains '/scout' %}aria-current="page"{% endif %}>Scout</a>
+        <a href="/about" {% if page.url contains '/about' %}aria-current="page"{% endif %}>About</a>
+      </nav>
+      <button class="theme-toggle"
+              data-theme-toggle
+              type="button"
+              aria-pressed="true"
+              aria-label="Switch to dark theme"
+              title="Switch to dark">
+        <span class="theme-toggle__disc" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
