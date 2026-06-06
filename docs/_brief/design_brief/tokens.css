@@ -1,0 +1,533 @@
+/* =========================================================================
+   formicary.ai — design tokens
+   -------------------------------------------------------------------------
+   A reproducible token set, not a one-off canvas. Everything below is a CSS
+   custom property: font families, type scale, colour, spacing, measure.
+   Translates cleanly to Jekyll: link this file once from the default layout.
+
+   Posture: editorial, typography-first, restraint over flourish. One accent.
+   Long-form readability is the priority (measure ~62ch, comfortable leading).
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=IBM+Plex+Sans:wght@0,400;0,450;0,500;0,600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  /* ---- Font families ---------------------------------------------------
+     Serif: Newsreader, a screen-first literary serif with optical sizing.
+     Mono : IBM Plex Mono, a quiet engineer's monospace for all metadata.   */
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Sans: IBM Plex Sans, sibling of the mono. Scout's machine voice — its
+     analysis is technical text (identifiers, versions) that reads cleaner
+     in a humanist sans than in the essay's literary serif.                */
+  --font-sans:  "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+
+  /* ---- Type scale (modular, ~1.22) ------------------------------------ */
+  --fs-micro: 0.6875rem;  /* 11px — fine print, chip labels             */
+  --fs-mono:  0.75rem;    /* 12px — metadata, kickers, machine chrome    */
+  --fs-meta:  0.8125rem;  /* 13px — dates, source lines                  */
+  --fs-sm:    0.9375rem;  /* 15px — captions, secondary prose            */
+  --fs-base:  1.1875rem;  /* 19px — body copy, the reading size          */
+  --fs-lead:  1.375rem;   /* 22px — lede / standfirst                     */
+  --fs-h3:    1.5rem;     /* 24px                                        */
+  --fs-h2:    1.9375rem;  /* 31px                                        */
+  --fs-h1:    2.75rem;    /* 44px — essay title                          */
+  --fs-display: 3.5rem;   /* 56px — page mastheads                       */
+
+  --lh-tight: 1.18;
+  --lh-snug:  1.35;
+  --lh-body:  1.72;       /* long-form leading                           */
+  --lh-meta:  1.5;
+
+  /* ---- Colour ----------------------------------------------------------
+     Direction: Pine. A cool-green-tinted neutral + a single green accent.
+     Light is the default theme; the dark twin is defined below in
+     :root[data-theme="dark"]. Both share one accent and the same hairline
+     restraint, so the site reads as one brand at two times of day.        */
+  color-scheme: light;
+
+  --paper:     oklch(0.985 0.004 165);  /* page background, near-white     */
+  --paper-sunk: oklch(0.963 0.006 165); /* recessed panels, callout fill   */
+  --paper-raise: oklch(0.997 0.002 165);/* cards lifted off paper          */
+
+  --ink:       oklch(0.250 0.012 175);  /* primary text, deep pine ink     */
+  --ink-soft:  oklch(0.400 0.012 175);  /* secondary text                  */
+  --ink-mute:  oklch(0.540 0.010 175);  /* metadata, captions              */
+  --ink-faint: oklch(0.660 0.008 175);  /* de-emphasised, placeholders     */
+
+  --rule:      oklch(0.890 0.006 165);  /* hairlines                       */
+  --rule-soft: oklch(0.930 0.004 165);  /* faintest dividers               */
+
+  --accent:        oklch(0.450 0.095 160); /* pine green — links, signal   */
+  --accent-deep:   oklch(0.375 0.090 160); /* hover (deeper on light)      */
+  --accent-tint:   oklch(0.940 0.025 160); /* faint accent wash            */
+  --accent-rule:   oklch(0.720 0.070 160); /* accent keylines              */
+
+  /* ---- Spacing scale (8px base, editorial top end) -------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  /* ---- Measure & layout ------------------------------------------------ */
+  --measure: 62ch;        /* long-form reading column (~60–66ch target)    */
+  --measure-wide: 74ch;   /* feed / wider content                          */
+  --page-pad: clamp(1.25rem, 5vw, 3rem);
+  --radius: 3px;          /* restrained; corners are nearly square         */
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 180ms;
+}
+
+/* =========================================================================
+   Dark theme — the same Pine direction at night. Opt-in via data-theme.
+   ========================================================================= */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper:     oklch(0.185 0.013 168);
+  --paper-sunk: oklch(0.225 0.015 168);
+  --paper-raise: oklch(0.215 0.014 168);
+
+  --ink:       oklch(0.928 0.010 165);
+  --ink-soft:  oklch(0.775 0.012 165);
+  --ink-mute:  oklch(0.620 0.014 165);
+  --ink-faint: oklch(0.500 0.014 168);
+
+  --rule:      oklch(0.320 0.016 170);
+  --rule-soft: oklch(0.270 0.014 170);
+
+  --accent:        oklch(0.760 0.130 158);
+  --accent-deep:   oklch(0.840 0.110 158);
+  --accent-tint:   oklch(0.300 0.052 160);
+  --accent-rule:   oklch(0.520 0.095 158);
+}
+
+/* =========================================================================
+   Reset + base
+   ========================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-serif);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  background: var(--paper);
+  transition: background-color 240ms var(--ease), color 240ms var(--ease);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+}
+
+::selection { background: var(--accent-tint); color: var(--ink); }
+
+a { color: var(--accent); text-decoration: none; }
+
+p { text-wrap: pretty; }
+
+/* =========================================================================
+   Reusable utilities
+   ========================================================================= */
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "kern" 1;
+}
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  font-weight: 500;
+}
+.measure { max-width: var(--measure); }
+
+/* skip-to / a11y */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* =========================================================================
+   Page shell
+   ========================================================================= */
+.shell {
+  width: 100%;
+  max-width: calc(var(--measure) + var(--page-pad) * 2);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+.shell--wide { max-width: calc(var(--measure-wide) + var(--page-pad) * 2); }
+
+/* =========================================================================
+   Site header / nav
+   ========================================================================= */
+.site-head {
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in oklch, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(1.1) blur(6px);
+  position: sticky; top: 0; z-index: 20;
+}
+.site-head__row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-5);
+  padding-block: var(--space-4);
+}
+.wordmark {
+  display: inline-flex; align-items: baseline; gap: 0.45ch;
+  color: var(--ink); font-weight: 500;
+  font-size: 1.35rem; letter-spacing: -0.01em;
+}
+.wordmark__dot { color: var(--accent); }
+.wordmark__tld {
+  font-family: var(--font-mono); font-size: var(--fs-mono);
+  color: var(--accent); letter-spacing: 0.04em;
+  transform: translateY(-0.15em);
+}
+.site-head__right { display: flex; align-items: center; gap: var(--space-5); }
+
+/* theme toggle: a minimal half-disc, the classic light/dark glyph */
+.theme-toggle {
+  flex: none;
+  width: 30px; height: 30px; padding: 0; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid var(--rule); border-radius: 50%;
+  transition: border-color var(--dur) var(--ease);
+}
+.theme-toggle:hover { border-color: var(--ink-mute); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-toggle__disc {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1.5px solid var(--ink-mute);
+  background: linear-gradient(90deg, var(--ink-soft) 0 50%, transparent 50% 100%);
+}
+.nav {
+  display: flex; align-items: center; gap: var(--space-5);
+  font-family: var(--font-mono); font-size: var(--fs-micro);
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+.nav a {
+  color: var(--ink-faint); text-decoration: none;
+  padding-bottom: 2px; border-bottom: 1px solid transparent;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.nav a:hover { color: var(--ink); border-bottom-color: var(--rule); }
+.nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* =========================================================================
+   Typographic flow (the essay)
+   ========================================================================= */
+.prose > * + * { margin-top: var(--space-5); }
+.prose p { font-size: var(--fs-base); line-height: var(--lh-body); }
+.prose em { font-style: italic; }
+.prose strong { font-weight: 600; }
+.prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--accent-rule);
+  transition: text-decoration-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.prose a:hover { color: var(--accent-deep); text-decoration-color: var(--accent); }
+
+.prose .drop::first-letter {
+  /* quiet initial: slightly larger first phrase handled in markup instead */
+}
+
+/* Essay masthead */
+.masthead { padding-top: var(--space-8); }
+.masthead__eyebrow { margin-bottom: var(--space-5); }
+.masthead h1 {
+  font-size: var(--fs-h1); line-height: var(--lh-tight);
+  font-weight: 500; letter-spacing: -0.015em;
+  max-width: 22ch;
+}
+
+/* Title + deck set as a pair: short title, then a standfirst with presence
+   tied directly beneath it by a short accent keyline. */
+.masthead h1.masthead__title {
+  font-size: clamp(2.65rem, 6.4vw, 3.7rem);
+  line-height: 1.02; font-weight: 560; letter-spacing: -0.022em;
+  color: var(--ink); max-width: 16ch; text-wrap: balance;
+}
+.masthead__deck {
+  margin-top: var(--space-4);
+  position: relative; padding-top: var(--space-4);
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  line-height: 1.36; font-weight: 400; letter-spacing: -0.006em;
+  color: var(--ink-soft); max-width: 40ch; text-wrap: balance;
+}
+.masthead__deck::before {
+  content: ""; position: absolute; top: 0; left: 0;
+  width: 3.5ch; height: 2px; background: var(--accent); border-radius: 2px;
+}
+.masthead__byline {
+  margin-top: var(--space-6);
+  font-family: var(--font-mono); font-size: var(--fs-meta);
+  color: var(--ink-mute); letter-spacing: 0.02em;
+}
+
+/* section heading inside prose */
+.prose h2 {
+  font-size: var(--fs-h3); font-weight: 600; line-height: var(--lh-snug);
+  letter-spacing: -0.01em; margin-top: var(--space-7);
+}
+
+/* a quiet section rule */
+.rule-mark {
+  border: 0; height: 0; border-top: 1px solid var(--rule);
+  width: 4ch; margin-block: var(--space-7); margin-inline: 0;
+}
+
+/* lede */
+.lede {
+  font-size: var(--fs-lead); line-height: 1.5; color: var(--ink-soft);
+}
+
+/* =========================================================================
+   Epistemic-status callout  (the signature custom element)
+   Deliberate signalling, not apology. Quiet, structured, set apart.
+   ========================================================================= */
+.epistemic {
+  --es-pad: clamp(1.1rem, 3vw, 1.75rem);
+  background: var(--paper-sunk);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent-rule);
+  border-radius: var(--radius);
+  padding: var(--es-pad);
+}
+.epistemic__label {
+  display: flex; align-items: center; gap: 0.7ch;
+  font-family: var(--font-mono); font-size: var(--fs-mono);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent-deep); font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+.epistemic__label::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex: none;
+}
+.epistemic__fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2) var(--space-4);
+  font-family: var(--font-mono); font-size: var(--fs-meta);
+  line-height: var(--lh-meta);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--rule);
+}
+.epistemic__fields dt {
+  color: var(--ink-faint); text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: var(--fs-micro); font-weight: 500;
+  padding-top: 0.25em;
+}
+.epistemic__fields dd { color: var(--ink); }
+.epistemic__note {
+  font-size: var(--fs-sm); line-height: 1.6; color: var(--ink-soft);
+}
+.epistemic__note em { font-style: italic; color: var(--ink-mute); }
+
+/* =========================================================================
+   Footer
+   ========================================================================= */
+.site-foot {
+  margin-top: var(--space-9);
+  border-top: 1px solid var(--rule);
+  padding-block: var(--space-6) var(--space-8);
+}
+.site-foot__row {
+  display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5);
+  align-items: baseline; justify-content: space-between;
+  font-family: var(--font-mono); font-size: var(--fs-mono);
+  color: var(--ink-mute); letter-spacing: 0.03em;
+}
+.site-foot__row a { color: var(--ink-mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.site-foot__row a:hover { color: var(--ink); border-bottom-color: var(--accent); }
+.site-foot__license { display: inline-flex; gap: 0.6ch; align-items: baseline; }
+
+/* =========================================================================
+   Scout — machine readout chrome
+   The instrument's voice. Mono-forward, ordered stream, a quiet sense that
+   this updates on its own.
+   ========================================================================= */
+.readout {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-2) var(--space-5);
+  font-family: var(--font-mono); font-size: var(--fs-meta);
+  color: var(--ink-mute); letter-spacing: 0.02em;
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--rule);
+  margin-top: var(--space-6);
+}
+.readout__live { display: inline-flex; align-items: center; gap: 0.7ch; color: var(--ink); }
+.readout__pulse {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none;
+  box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 60%, transparent);
+  animation: scout-pulse 2.6s var(--ease) infinite;
+}
+.readout__sep { color: var(--rule); }
+.readout b { color: var(--ink); font-weight: 500; }
+@keyframes scout-pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 7px color-mix(in oklch, var(--accent) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 0%, transparent); }
+}
+
+/* ---- Filter bar ------------------------------------------------------- */
+.filters {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-3) var(--space-5);
+  padding-block: var(--space-5);
+}
+.filters__group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.filters__legend {
+  font-family: var(--font-mono); font-size: var(--fs-micro);
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+  margin-right: var(--space-1);
+}
+.chip {
+  font-family: var(--font-mono); font-size: var(--fs-mono);
+  letter-spacing: 0.02em; color: var(--ink-soft);
+  background: transparent; border: 1px solid var(--rule);
+  border-radius: 100px; padding: 0.25rem 0.7rem; cursor: pointer;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.chip:hover { border-color: var(--ink-faint); color: var(--ink); }
+.chip[aria-pressed="true"] {
+  color: var(--paper); background: var(--ink); border-color: var(--ink);
+}
+.chip--accent[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
+.chip__count { opacity: 0.55; margin-left: 0.5ch; }
+
+/* ---- Feed: rule-and-spacing rhythm, not heavy boxes ------------------- */
+.feed { list-style: none; padding: 0; }
+.feed__item {
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+.feed__item:first-child { border-top: 0; }
+.feed__item[data-score="5"] { border-left: 2px solid var(--accent); padding-left: var(--space-5); margin-left: calc(-1 * var(--space-5) - 2px); }
+
+/* meta row: relevance signal + date, sits beneath the title */
+.feed__meta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-4); margin-bottom: var(--space-4);
+}
+.signal { display: inline-flex; align-items: center; gap: 0.85ch; }
+.signal__pips { display: inline-flex; gap: 3px; }
+.signal__pip {
+  width: 14px; height: 4px; border-radius: 1px; background: var(--rule);
+}
+.signal__pip[data-on="1"] { background: var(--ink-soft); }
+.feed__item[data-score="5"] .signal__pip[data-on="1"] { background: var(--accent); }
+.signal__label {
+  font-family: var(--font-mono); font-size: var(--fs-mono);
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-mute); font-weight: 500;
+}
+.feed__item[data-score="5"] .signal__label { color: var(--accent-deep); }
+.feed__date {
+  font-family: var(--font-mono); font-size: var(--fs-meta);
+  color: var(--ink-faint); letter-spacing: 0.02em; white-space: nowrap;
+}
+
+/* the article title is the headline you scan */
+.feed__title {
+  font-family: var(--font-serif); font-weight: 500;
+  font-size: var(--fs-h3); line-height: 1.2; letter-spacing: -0.012em;
+  color: var(--ink); margin-bottom: var(--space-3);
+  max-width: 40ch; text-wrap: pretty;
+}
+.feed__title a {
+  color: inherit; text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.feed__title a:hover { color: var(--accent-deep); }
+
+/* Scout's analysis — the machine voice, set in Plex Sans for legibility */
+.feed__analysis {
+  font-family: var(--font-sans);
+  font-size: 1rem; line-height: 1.62; color: var(--ink-soft);
+  letter-spacing: -0.003em;
+  max-width: 70ch;
+}
+
+/* source line + tags: quiet metadata around the analysis */
+.feed__foot {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--space-2) var(--space-5); margin-top: var(--space-4);
+}
+.feed__source {
+  font-family: var(--font-mono); font-size: var(--fs-meta);
+  color: var(--ink-soft); letter-spacing: 0.01em;
+  display: inline-flex; align-items: baseline; gap: 0.6ch; max-width: 64ch;
+}
+.feed__source a {
+  color: var(--ink); text-decoration: none;
+  border-bottom: 1px solid var(--accent-rule);
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.feed__source a:hover { color: var(--accent-deep); border-bottom-color: var(--accent); }
+.feed__source .arrow { color: var(--accent); transform: translateY(0.02em); }
+.feed__domain { color: var(--ink-faint); }
+.feed__tags { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); margin-left: auto; }
+.tag {
+  font-family: var(--font-mono); font-size: var(--fs-micro);
+  letter-spacing: 0.03em; color: var(--ink-mute);
+  border: 1px solid var(--rule-soft); border-radius: 3px;
+  padding: 0.1rem 0.45rem; background: transparent; cursor: pointer;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.tag::before { content: "#"; color: var(--ink-faint); }
+.tag:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+/* scoring rationale: the instrument explaining itself, very quiet */
+.feed__rationale {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono); font-size: var(--fs-meta); line-height: 1.55;
+  color: var(--ink-mute); max-width: 64ch;
+  padding-left: var(--space-3); border-left: 1px solid var(--rule);
+}
+.feed__rationale b { color: var(--ink-soft); font-weight: 600; }
+
+.feed__empty {
+  padding-block: var(--space-8); text-align: center;
+  font-family: var(--font-mono); font-size: var(--fs-meta); color: var(--ink-faint);
+}
+
+/* =========================================================================
+   About page
+   ========================================================================= */
+.bio-grid { display: grid; gap: var(--space-2) var(--space-5); grid-template-columns: max-content 1fr;
+  font-family: var(--font-mono); font-size: var(--fs-meta); line-height: var(--lh-meta); }
+.bio-grid dt { color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: var(--fs-micro); font-weight: 500; padding-top: 0.2em; }
+.bio-grid dd { color: var(--ink); }
+.bio-grid dd a { color: var(--accent); border-bottom: 1px solid var(--accent-rule); }
+
+.col2 { display: grid; gap: var(--space-7); }
+@media (min-width: 720px) { .col2 { grid-template-columns: 1fr 1fr; } }
+.isnt-list { list-style: none; padding: 0; }
+.isnt-list li { display: flex; gap: 0.9ch; padding-block: var(--space-2); border-top: 1px solid var(--rule-soft); }
+.isnt-list li:first-child { border-top: 0; }
+.isnt-list .mark { font-family: var(--font-mono); flex: none; }
+.isnt-list .is .mark { color: var(--accent); }
+.isnt-list .isnt .mark { color: var(--ink-faint); }
+
+/* =========================================================================
+   Reduced motion
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
