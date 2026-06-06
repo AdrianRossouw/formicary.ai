@@ -6,6 +6,7 @@ SOUP (Software of Unknown Provenance): external and third-party components used 
 |---|---|---|---|
 | Jekyll | `~> 4.3` (resolved: 4.4.1) | Static site generator; builds `_site/` from layouts, includes, and markdown pages | `Gemfile`; https://jekyllrb.com |
 | jekyll-seo-tag | `~> 2.8` (resolved: 2.9.0) | Injects SEO `<meta>` tags into page `<head>` | `Gemfile`; https://github.com/jekyll/jekyll-seo-tag |
+| jekyll-sitemap | `~> 1.4` (resolved: 1.4.0) | Generates `sitemap.xml` at build time from all non-excluded pages | `Gemfile`; https://github.com/jekyll/jekyll-sitemap |
 | actions/checkout | `v4` | Checks out repository source in the Actions build runner | `.github/workflows/deploy.yml`; https://github.com/actions/checkout |
 | actions/configure-pages | `v5` | Configures GitHub Pages settings and provides `base_path` to the build | `.github/workflows/deploy.yml`; https://github.com/actions/configure-pages |
 | actions/upload-pages-artifact | `v3` | Packages `_site/` as the Pages deployment artifact | `.github/workflows/deploy.yml`; https://github.com/actions/upload-pages-artifact |
