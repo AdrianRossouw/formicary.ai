@@ -50,31 +50,31 @@
 
 ## 7. Scout page (feat/scout-page)
 
-- [ ] 7.1 Create `assets/js/scout.js` with exported `parseFeed`, `parseSummaryHtml`, `extractScore`, `filterItems` functions, and the `init` render/filter wiring [REQ-020]
-- [ ] 7.2 Implement `parseFeed`: fetch unpinned gist URL, parse Atom XML with DOMParser, call `parseSummaryHtml` per entry, sort newest-first [REQ-003, REQ-020]
-- [ ] 7.3 Implement `parseSummaryHtml`: parse summary HTML with DOMParser, extract analysis/score-line/rationale/tags as text nodes only [REQ-004, REQ-020]
-- [ ] 7.4 Implement `extractScore`: regex parse score integer and label from score-line string [REQ-020]
-- [ ] 7.5 Implement `filterItems`: single-select rel filter, multi-select OR tag filter, combined AND logic [REQ-022]
-- [ ] 7.6 Implement card renderer: all content via `createElement`/`textContent`, no `innerHTML` of feed data [REQ-004, REQ-021]
-- [ ] 7.7 Implement loading, empty, and error states [REQ-007]
-- [ ] 7.8 Create `scout.html` with Liquid masthead, readout bar skeleton, filter chrome, and `<ol class="feed">` target; wire `scout.js` [REQ-008, REQ-021, REQ-022]
-- [ ] 7.9 Verify live feed loads and renders cards in a browser [REQ-003]
-- [ ] 7.10 Verify unpinned URL (no SHA) in `scout.js` source [REQ-003]
-- [ ] 7.11 Update `docs/traceability.md` for REQ-003, REQ-004, REQ-007, REQ-008, REQ-020, REQ-021, REQ-022
+- [x] 7.1 Create `assets/js/scout.js` with exported `parseFeed`, `parseSummaryHtml`, `extractScore`, `filterItems` functions, and the `init` render/filter wiring [REQ-020]
+- [x] 7.2 Implement `parseFeed`: fetch unpinned gist URL, parse Atom XML with DOMParser, call `parseSummaryHtml` per entry, sort newest-first [REQ-003, REQ-020]
+- [x] 7.3 Implement `parseSummaryHtml`: parse summary HTML with DOMParser, extract analysis/score-line/rationale/tags as text nodes only [REQ-004, REQ-020]
+- [x] 7.4 Implement `extractScore`: regex parse score integer and label from score-line string [REQ-020]
+- [x] 7.5 Implement `filterItems`: single-select rel filter, multi-select OR tag filter, combined AND logic [REQ-022]
+- [x] 7.6 Implement card renderer: all content via `createElement`/`textContent`, no `innerHTML` of feed data [REQ-004, REQ-021]
+- [x] 7.7 Implement loading, empty, and error states [REQ-007]
+- [x] 7.8 Create `scout.html` with Liquid masthead, readout bar skeleton, filter chrome, and `<ol class="feed">` target; wire `scout.js` [REQ-008, REQ-021, REQ-022]
+- [x] 7.9 Verify live feed loads and renders cards in a browser [REQ-003]
+- [x] 7.10 Verify unpinned URL (no SHA) in `scout.js` source [REQ-003]
+- [x] 7.11 Update `docs/traceability.md` for REQ-003, REQ-004, REQ-007, REQ-008, REQ-020, REQ-021, REQ-022
 - [ ] 7.12 Commit (`feat(REQ-003,REQ-004,REQ-007,REQ-008,REQ-020,REQ-021,REQ-022): scout page with safe client-side feed render`) and merge to `main`
 
 ## 8. Scout tests (feat/scout-page, same branch)
 
-- [ ] 8.1 Create `package.json` with Vitest dependency and `"test": "vitest run"` script [REQ-031]
-- [ ] 8.2 Create `vitest.config.js` with jsdom environment [REQ-031]
-- [ ] 8.3 Create `tests/scout.test.js` with fixture Atom XML captured from live feed [REQ-031]
-- [ ] 8.4 Write `parseFeed` tests: valid feed, empty feed, malformed XML [REQ-032]
-- [ ] 8.5 Write `parseSummaryHtml` tests: analysis extraction, no HTML tags in output [REQ-033]
-- [ ] 8.6 Write `extractScore` tests: all score levels (3, 4, 5), unrecognised input fallback [REQ-034]
-- [ ] 8.7 Write `filterItems` tests: rel filter, OR tag filter, combined AND filter, empty tags [REQ-035]
-- [ ] 8.8 Write REQ-004 safety assertion: `<script>` tag in analysis does not produce a script element [REQ-036]
-- [ ] 8.9 Run `npm test`; all tests pass [REQ-031]
-- [ ] 8.10 Update `docs/traceability.md` for REQ-031 through REQ-036; mark REQ-004 verified by test [REQ-027]
+- [x] 8.1 Create `package.json` with Vitest dependency and `"test": "vitest run"` script [REQ-031]
+- [x] 8.2 Create `vitest.config.js` with jsdom environment [REQ-031]
+- [x] 8.3 Create `tests/scout.test.js` with fixture Atom XML captured from live feed [REQ-031]
+- [x] 8.4 Write `parseFeed` tests: valid feed, empty feed, malformed XML [REQ-032]
+- [x] 8.5 Write `parseSummaryHtml` tests: analysis extraction, no HTML tags in output [REQ-033]
+- [x] 8.6 Write `extractScore` tests: all score levels (3, 4, 5), unrecognised input fallback [REQ-034]
+- [x] 8.7 Write `filterItems` tests: rel filter, OR tag filter, combined AND filter, empty tags [REQ-035]
+- [x] 8.8 Write REQ-004 safety assertion: `<script>` tag in analysis does not produce a script element [REQ-036]
+- [x] 8.9 Run `npm test`; all tests pass [REQ-031]
+- [x] 8.10 Update `docs/traceability.md` for REQ-031 through REQ-036; mark REQ-004 verified by test [REQ-027]
 - [ ] 8.11 Commit (`test(REQ-031,REQ-032,REQ-033,REQ-034,REQ-035,REQ-036): vitest suite for scout parsing and filter logic`) and merge to `main`
 
 ## 9. About page (feat/about-page)
