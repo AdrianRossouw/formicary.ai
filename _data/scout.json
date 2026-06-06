@@ -1,0 +1,719 @@
+{
+  "updated": "2026-06-05T18:11:09Z",
+  "subtitle": "Formicary’s forager — AI agent orchestration, coding agents, regulated software",
+  "items": [
+    {
+      "title": "Alibaba open-code-review: Hybrid Deterministic + LLM Agent Code Review at Scale",
+      "link": "https://github.com/alibaba/open-code-review",
+      "updated": "2026-06-05T09:15:00Z",
+      "published": "Originally published 18 May 2026",
+      "analysis": "Alibaba's open-code-review (1,938 stars, created May 18) uses a hybrid architecture: deterministic pipelines for precise line-level comments using a built-in fine-tuned ruleset (NPE detection, thread-safety, XSS, SQL injection), layered with an LLM agent for deeper semantic analysis. Compatible with OpenAI and Anthropic APIs; described as battle-tested at Alibaba scale. The hybrid approach is the key design insight: deterministic rules handle the cheap, auditable, zero-hallucination-risk catches; LLM handles subtle issues that require context. This two-tier pattern directly applies to Formicary's quality-gate design for agent-produced code.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3 — Hybrid deterministic+LLM quality gate pattern is directly applicable to Formicary. Alibaba-scale validation of the architecture.",
+      "tags": [
+        "ai-coding",
+        "dev-tooling",
+        "spec-driven"
+      ],
+      "img": "https://opengraph.githubassets.com/8eb4d92cc4d555c5307544db713dd0fede49134f6df3d388de8d210a73fd27ae/alibaba/open-code-review"
+    },
+    {
+      "title": "Google ADK v2.2.0: Default Model Shifts to Gemini 3 Preview, Multi-Turn Rubric Evaluator Added",
+      "link": "https://github.com/google/adk-python/releases/tag/v2.2.0",
+      "updated": "2026-06-05T09:10:00Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Google ADK v2.2.0 (June 4) includes two notable changes: (1) BREAKING — the default LlmAgent model switches from gemini-2.5-flash to gemini-3-flash-preview ahead of the 2026-10-16 gemini-2.5-flash shutdown; agents without explicit model= set will run on the preview immediately. (2) New RubricBasedMultiTurnTrajectoryEvaluator for structured multi-turn session quality scoring, plus AutoTracingPlugin for zero-config OpenTelemetry instrumentation. The trajectory evaluator is the most interesting piece for Formicary: it addresses the hard measurement problem of whether a multi-turn agent session actually achieved its goal — a prerequisite for any reliable quality gate.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3 — The multi-turn rubric evaluator is a validated approach to the agent goal-achievement measurement problem Formicary needs to solve. Breaking model change is an ops warning.",
+      "tags": [
+        "multi-agent",
+        "agent-platforms",
+        "dev-tooling"
+      ],
+      "img": "https://opengraph.githubassets.com/faff64549b8b40b0989d11e6fa789372768fed3e30d95a110182296c9cebb492/google/adk-python/releases/tag/v2.2.0"
+    },
+    {
+      "title": "Claude Code v2.1.163: Managed Version Enforcement and Hook Feedback Loop",
+      "link": "https://github.com/anthropics/claude-code/releases/tag/v2.1.163",
+      "updated": "2026-06-05T09:05:00Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Claude Code v2.1.163 (June 4) adds two operational features: (1) requiredMinimumVersion and requiredMaximumVersion managed settings — the CLI refuses to start if its version falls outside the configured range, directing users to an approved version; (2) Stop and SubagentStop hooks can now return hookSpecificOutput.additionalContext to feed back into agent reasoning without raising a hook error, enabling programmatic course-correction mid-session. Also added: /plugin list command, stdio MCP servers receive CLAUDE_CODE_SESSION_ID on --resume, and a fix for background shells that hung forever after a -p session closed. v2.1.165 (June 5) contains only bug fixes.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3 — Version enforcement is the missing piece for reproducible Formicary agent container images; the hook additionalContext enables quality-gate feedback loops without session abort.",
+      "tags": [
+        "ai-coding",
+        "anthropic-platform",
+        "dev-tooling"
+      ],
+      "img": "https://opengraph.githubassets.com/e26c48721c96069ef32cfba59adb9857e36902cfffa52ad6e3f34a8e9a527fef/anthropics/claude-code/releases/tag/v2.1.163"
+    },
+    {
+      "title": "Anthropic Releases Defending Code: Open-Source Autonomous Vulnerability Harness with gVisor Sandboxing",
+      "link": "https://github.com/anthropics/defending-code-reference-harness",
+      "updated": "2026-06-05T09:00:00Z",
+      "published": "Originally published 5 June 2026",
+      "analysis": "Anthropic published a reference harness (1,572 stars, created May 22) for autonomous vulnerability discovery and remediation via Claude, based on learnings from security team partnerships during Claude Mythos Preview. The harness includes Claude Code skills (/threat-model, /vuln-scan, /triage, /patch, /customize) and an autonomous pipeline (recon → find → verify → report → patch) running inside gVisor with per-agent egress allowlists. The gVisor + allowlisted-egress-per-agent design is Anthropic's own validated isolation approach, and the skill structure is a direct template for Formicary's specialized quality-gate and security agents.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "Score 4 — First-party Anthropic reference harness with sandboxing design directly applicable to Formicary Docker isolation and skill-based agent decomposition.",
+      "tags": [
+        "ai-coding",
+        "agent-security",
+        "dev-tooling"
+      ],
+      "img": "https://opengraph.githubassets.com/d61e789072cb61e7b685bab46694210f83b14f6c35f949a47798bfb45a3ae44f/anthropics/defending-code-reference-harness"
+    },
+    {
+      "title": "Did Claude Increase Bugs in rsync? Statistical Analysis Finds No Unusual Bug Rate (p=0.46)",
+      "link": "https://alexispurslane.github.io/rsync-analysis/",
+      "updated": "2026-06-05T18:08:01Z",
+      "published": "Originally published 5 June 2026",
+      "analysis": "June 2026 statistical counter-analysis of viral claims that Claude-assisted rsync releases introduced more bugs. Using exact permutation test and Fisher's exact test on all 35 rsync releases: the two Claude-assisted releases sit at the 31st and 74th percentile of the historical bug distribution (mean 3.78 bugs/10 commits vs. historical mean 7.59). p-value = 0.46 (one-sided, H1: Claude mean > historical) — no statistically distinguishable signal. Methodology co-designed with a Penn State statistician; full pipeline reproducible from scratch.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "spec-driven"
+      ],
+      "img": ""
+    },
+    {
+      "title": "MCP Security by the Numbers: 12,520 Exposed Servers, 40% Unauthenticated, 67 CVEs in June",
+      "link": "https://adversa.ai/blog/top-mcp-security-resources-june-2026/",
+      "updated": "2026-06-05T18:07:50Z",
+      "published": "Originally published 5 June 2026",
+      "analysis": "Adversa AI June 2026 MCP-specific security digest (June 4): Censys scan found 12,520 Internet-accessible MCP services, the majority unauthenticated; a separate study puts the no-auth rate at ~40% of remote servers. VIPER-MCP swept 40,000 server repositories and produced 67 CVEs. Akamai disclosed three database-MCP flaws (one remains unpatched). NSA design guidance also covered. The digest is companion to the broader June agentic security roundup already tracked.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "agent-protocols"
+      ],
+      "img": "https://adversa.ai/wp-content/uploads/2025/07/Top-AI-Security-Incidents-2025-Edition-2.png"
+    },
+    {
+      "title": "Mastra v1.41.0: Per-Request Workspace Sandboxes and Sandbox Continuity for Background Processes",
+      "link": "https://github.com/mastra-ai/mastra/releases/tag/%40mastra%2Fcore%401.41.0",
+      "updated": "2026-06-05T18:07:39Z",
+      "published": "Originally published 5 June 2026",
+      "analysis": "Mastra v1.41.0 (June 5) adds per-request sandbox routing: the Workspace sandbox parameter can now be a resolver function, enabling each agent request to get its own isolated working directory with separate permissions — critical for multi-tenant deployments. Paired with sandboxCacheKey, which lets background processes (execute_command, get_process_output, kill_process) reliably attach to the same sandbox across follow-up requests. Also adds untilIdle streaming to keep streams open across background-task continuations.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "multi-agent",
+        "agent-platforms",
+        "dev-tooling"
+      ],
+      "img": "https://opengraph.githubassets.com/482a8f8fde9ba1908f5edcc048fa04b5c347b60c9c264d803df63066fef1badc/mastra-ai/mastra/releases/tag/%40mastra/core%401.41.0"
+    },
+    {
+      "title": "Anthropic Platform API (June 2): Advisor Tool max_tokens Cap and No-Charge Refusals",
+      "link": "https://platform.claude.com/docs/en/release-notes/overview#2026-06-02",
+      "updated": "2026-06-04T18:08:03Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Two June 2 additions to the Anthropic API: (1) The advisor tool now supports max_tokens per call, capping advisor model output to reduce latency and cost for workloads that do not need full-length advisor responses. Set tools[].max_tokens on the advisor tool definition. (2) API requests are no longer billed when stop_reason is refusal and Claude generated zero output tokens.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "anthropic-platform"
+      ],
+      "img": ""
+    },
+    {
+      "title": "MAF at BUILD 2026: Agent Harness, TodoProvider, Plan/Execute Modes Built-In",
+      "link": "https://devblogs.microsoft.com/agent-framework/microsoft-agent-framework-at-build-2026-announce/",
+      "updated": "2026-06-04T18:08:03Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Microsoft Agent Framework BUILD 2026 announces Agent Harness as first-class via .AsHarnessAgent() method, with built-in providers: FileMemoryProvider (session-scoped file memory at agent-file-memory/{session}/), FileAccessProvider, TodoProvider (multi-step work tracking in session state), AgentModeProvider (plan vs. execute mode separation), AgentSkillsProvider (modular skill injection from filesystem), and BackgroundAgentsProvider (delegate to parallel child agents for fan-out). Hosted Agents GA in Microsoft Foundry Agent Service by end of June. CodeAct primitive for code-writing agents also announced.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "multi-agent",
+        "agent-platforms"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Mastra v1.39.0: Thread-Scoped Notification Signals and Persisted Inbox",
+      "link": "https://github.com/mastra-ai/mastra/releases/tag/%40mastra/core%401.39.0",
+      "updated": "2026-06-04T18:07:02Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Mastra adds thread-scoped notification signals via agent.sendNotificationSignal(). The inbox model supports priority-aware delivery (due-notification dispatch for time-sensitive signals, low-priority rollup batching for background updates), persistent read/unread tracking, and structured metadata. Experimental feature targeting async agent communication patterns.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-platforms",
+        "multi-agent"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Autonomous AI Agent Finds 2-Year-Old Redis RCE: CVE-2026-23479 (CVSS 8.8)",
+      "link": "https://thehackernews.com/2026/06/autonomous-ai-tool-finds-2-year-old-rce.html",
+      "updated": "2026-06-04T18:06:46Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Team Xint Code's autonomous AI bug-hunting tool discovered a use-after-free in Redis 7.2.0+ blocking-client code (unblockClientOnKey() in blocked.c). The flaw was introduced by two PRs in 2023, survived multiple security reviews, and went undetected for over two years. CVSS 8.8. In most cloud environments, Redis ships with default-user privileges enabled, meaning the exploit chain (heap-address leak via Lua → client grooming → function-pointer overwrite) requires only an authenticated session — which in default deployments is trivially obtained. Wiz analysis confirms Redis is present in a large majority of cloud environments.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "ai-coding"
+      ],
+      "img": ""
+    },
+    {
+      "title": "When AI Builds Itself: Anthropic Institute on Recursive Self-Improvement",
+      "link": "https://www.anthropic.com/institute/recursive-self-improvement",
+      "updated": "2026-06-04T18:06:33Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Anthropic's Institute publishes internal data showing AI is already accelerating its own development. Anthropic engineers now ship 8x as much code per quarter as in 2021-2025. Task horizon is doubling every 4 months (down from 7 months prior): Claude Opus 3 handled 4-minute tasks (March 2024), Sonnet 3.7 handled 90-minute tasks (March 2025), Opus 4.6 handles 12-hour tasks now. If the trend holds: multi-day tasks come into range this year, multi-week tasks in 2027. The post explicitly addresses recursive self-improvement as a trajectory, not inevitability, and discusses implications for safety and human control.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "multi-agent",
+        "anthropic-platform"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Poisoning Claude Code: One GitHub Issue to Break the Supply Chain",
+      "link": "https://flatt.tech/research/posts/poisoning-claude-code-one-github-issue-to-break-the-supply-chain/",
+      "updated": "2026-06-04T18:06:13Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "RyotaK (GMO Flatt Security) found a permission-bypass vulnerability in Claude Code GitHub Actions: because the workflow trusted any actor whose name ended in [bot], a public GitHub App token was sufficient to trigger workflows on arbitrary public repos. Combined with indirect prompt injection (planting instructions inside an issue body), this let an attacker extract OIDC credentials from /proc/self/environ and obtain write access to repos. Anthropic's own claude-code-action repo was vulnerable — a successful attack could have poisoned the action itself and propagated to every downstream consumer. Variants were actively exploited in the wild before disclosure. Fixed in claude-code-action v1.0.94; CVSS 7.8.",
+      "scoreLine": "🐜 Scout — 🔴 5/5 — Direct impact",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "ai-coding"
+      ],
+      "img": ""
+    },
+    {
+      "title": "zerolang: Graph-First Language for Agent Code Manipulation via Compiler-Derived ProgramGraph",
+      "link": "https://github.com/vercel-labs/zerolang",
+      "updated": "2026-06-04T08:06:55Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "zerolang (Vercel Labs, 4,848 stars) is an experimental programming language designed for agents: instead of text-patch guesswork, agents work through a compiler-derived ProgramGraph (node IDs, types, effects, ownership). Collapses the typical agent edit-format-reparse-check-fix loop into a single compiler-validated semantic operation. Reference design for type-safe code manipulation.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "dev-tooling"
+      ],
+      "img": "https://opengraph.githubassets.com/f8cbce2878f5b476ec399987dad32d2d4cc16421e4678d8334aa394ba505d115/vercel-labs/zerolang"
+    },
+    {
+      "title": "IETF Internet-Draft: Security Considerations for MCP in AI Agent Systems",
+      "link": "https://datatracker.ietf.org/doc/draft-mohiuddin-mcp-security-considerations/",
+      "updated": "2026-06-04T08:06:44Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "An individual Internet-Draft submitted to the IETF (draft-mohiuddin-mcp-security-considerations-00, June 1) formalizes security considerations for Model Context Protocol implementations in AI agent systems. This is the first submission to the IETF for MCP security — not yet a Working Group document, but individual I-Ds often shape eventual standards requirements.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "agent-protocols",
+        "agent-security"
+      ],
+      "img": ""
+    },
+    {
+      "title": "forkd: Fork-from-Warm MicroVM Sandbox for AI Agent Fan-Out — 100 Sandboxes in 100ms",
+      "link": "https://github.com/deeplethe/forkd",
+      "updated": "2026-06-04T08:06:35Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "forkd (deeplethe, 1,296 stars) replaces cold-boot container isolation with fork-from-warm: spawn 100 agent execution sandboxes from a paused parent process in ~100ms instead of seconds. The live-BRANCH primitive (~150ms pause) lets a running agent fork its own in-flight VM state for speculative exploration or rollback checkpointing. KVM-isolated with snapshot copy-on-write.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "dev-tooling",
+        "agent-platforms"
+      ],
+      "img": "https://opengraph.githubassets.com/cb4f18aab7a6a38a0035d4df47048fdc6e28278f5cfecc305faeb2b65d57f38b/deeplethe/forkd"
+    },
+    {
+      "title": "CLI-Anything: Makes Any Software Agent-Native with Auto-Generated CLI Harnesses (41K Stars)",
+      "link": "https://github.com/HKUDS/CLI-Anything",
+      "updated": "2026-06-04T08:06:23Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "CLI-Anything (HKUDS, 41,983 stars) auto-generates structured CLI harnesses with JSON output and SKILL.md metadata for any application, giving agents structured access to software that was never designed for automation. The CLI-Hub registry turns tool expansion into a package-manager experience. From the same HKUDS lab that built nanobot (42K stars).",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "dev-tooling",
+        "multi-agent"
+      ],
+      "img": "https://opengraph.githubassets.com/db921467306c3965450d4c80e16ac2ff9ba37b42658873cf642f65baf722a605/HKUDS/CLI-Anything"
+    },
+    {
+      "title": "Piebald v2.1.162 (+9,871 tokens): Cross-Harness Init, LSP Query Enforcement, NotebookEdit Rework",
+      "link": "https://github.com/Piebald-AI/claude-code-system-prompts/commit/4cd566a1",
+      "updated": "2026-06-04T08:06:14Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Piebald v2.1.162 (June 3, +9,871 tokens): Two new /design-sync skills for Storybook and package source shapes. /init CLAUDE.md discovery expanded to .devin/rules/ and .windsurf/rules/ alongside existing Cursor/Copilot/Windsurf/Cline paths. LSP workspaceSymbol clarified to always require a query. NotebookEdit guidance reworked around cell IDs from prior Read output.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "multi-agent"
+      ],
+      "img": "https://opengraph.githubassets.com/adf9d4ef43fc60f74b69411a1846a9ff184cf6c7b4b0deeec43f217ec3f029c4/Piebald-AI/claude-code-system-prompts/commit/4cd566a1ec0403e01055d3d400092b087a076697"
+    },
+    {
+      "title": "Claude Code v2.1.162: Agent Blocked-On Visibility and Native Tool Fixes",
+      "link": "https://github.com/anthropics/claude-code/releases/tag/v2.1.162",
+      "updated": "2026-06-04T08:06:03Z",
+      "published": "Originally published 4 June 2026",
+      "analysis": "Claude Code v2.1.162 (June 3): `claude agents --json` now includes a `waitingFor` field showing what a blocked session is waiting on (e.g. a permission prompt). `--tools` explicitly listing Grep/Glob now provides dedicated search tools on native builds with embedded search — previously these names were silently ignored.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "dev-tooling"
+      ],
+      "img": "https://opengraph.githubassets.com/8cd76e408f7a50c3053deb3ff2dc142ed50e47f7288956c57524a0f4505201e7/anthropics/claude-code/releases/tag/v2.1.162"
+    },
+    {
+      "title": "Google Cloud Storage MCP Server Now GA: Agents Access Unstructured Data via Standard MCP Tool Calls",
+      "link": "https://cloud.google.com/blog/topics/developers-practitioners/build-ai-agents-faster-with-gcs-google-cloud-storage-mcp-server/",
+      "updated": "2026-06-03T18:05:53Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Google Cloud released a GA MCP server for Google Cloud Storage, enabling AI agents to read and query unstructured files — documents, logs, datasets — through standard MCP tool calls without custom connector code. This follows the AlloyDB MCP Server GA from June 1 and continues Google's pattern of wrapping every major GCP service in an MCP interface. For Formicary, this is a useful architectural signal: when Formicary needs to expose its own data stores (agent scratchpads, test artefacts, compliance evidence) to agents, the MCP server pattern is the right abstraction layer — and Google is demonstrating how to do it at production scale.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-protocols",
+        "dev-tooling"
+      ],
+      "img": "https://storage.googleapis.com/gweb-cloudblog-publish/images/Hero-image.max-2500x2500.png"
+    },
+    {
+      "title": "Uber Caps AI Coding Tool Spending at $1,500/Month After Burning Through Entire 2026 Budget in Four Months",
+      "link": "https://www.bloomberg.com/news/articles/2026-06-02/uber-caps-usage-of-ai-tools-like-claude-code-to-cut-costs",
+      "updated": "2026-06-03T18:05:42Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Uber imposed a $1,500/month per-tool spending cap on AI coding assistants including Claude Code and Cursor, after the company burned through its entire 2026 AI budget inside four months. The COO publicly questioned ROI, saying the spend was hard to tie directly to shipped features — the clearest enterprise-scale example yet of AI coding cost overrun. For Formicary, this validates the budget-aware scheduling design (checking Anthropic billing before each agent wake) and gives a concrete calibration point: $1,500/month is what uncapped Claude Code usage costs per developer at a large tech company. Formicary's cron-paced, budget-gated approach is the right architecture for sustainable autonomous development.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "dev-tooling"
+      ],
+      "img": ""
+    },
+    {
+      "title": "GitHub Copilot App: Dedicated Desktop Experience for Managing Parallel AI Agents",
+      "link": "https://github.blog/news-insights/product-news/github-copilot-app-the-agent-native-desktop-experience/",
+      "updated": "2026-06-03T18:05:36Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "GitHub launched its Copilot app — a dedicated desktop application for agent-driven development that unifies parallel workstreams, GitHub integration, and PR lifecycle management in a single interface. A \"My Work\" view shows active agent sessions, issues, PRs, and background automations across connected repos. For Formicary, this is the clearest reference implementation yet of what a human control plane for multi-agent development looks like; Formicary's async Mattermost-based coordination solves the same problem but for cron-paced, containerised agents with no human at the keyboard.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "multi-agent"
+      ],
+      "img": "https://github.blog/wp-content/uploads/2026/06/MSFTBuild_Blog_Header_01.jpg"
+    },
+    {
+      "title": "1-Click GitHub Token Stealing via a VSCode Webview Bug — Full-Repo Access via Malicious Link",
+      "link": "https://blog.ammaraskar.com/github-token-stealing/",
+      "updated": "2026-06-03T08:06:34Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Security researcher Ammar Askar discloses a VSCode webview vulnerability that allows an attacker to steal GitHub OAuth tokens with a single click. When a user navigates to github.dev from a repo, GitHub POSTs an OAuth token to the browser VSCode instance — and the token has full access to ALL of the user's repos, not just the one being viewed. A bug in VSCode's webview sandboxing (designed to isolate JS from the main window) allows an attacker to exfiltrate this token, enabling read/write access to every private repo the victim has access to.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3: Directly relevant to Formicary agent infrastructure. Agents that use GitHub via VSCode extensions or github.dev are exposed. Combined with the TeamPCP VS Code extension poisoning (May 20), this establishes VSCode + GitHub integration as a high-value attack surface. Formicary agents should use git CLI with short-lived tokens over SSH; never authenticate via VSCode extensions.",
+      "tags": [
+        "agent-security",
+        "ai-coding"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Mastra Adds Agent Client Protocol (ACP): Delegate to Claude Agent, Codex CLI, Cursor from Mastra Agents",
+      "link": "https://mastra.ai/blog/introducing-agent-client-protocol",
+      "updated": "2026-06-03T08:06:26Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Mastra agents now support ACP (Agent Client Protocol), allowing them to delegate coding tasks to Claude Agent, Codex CLI, Cursor, Gemini CLI, or any ACP-compatible harness. The Mastra agent acts as supervisor — providing skills and context — then hands off to a subagent harness for execution (codebase reasoning, file editing, shell execution, self-correcting test loops, Git operations). Available via @mastra/acp package; requires @mastra/core@1.34.0+.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3: ACP is gaining traction as the cross-framework agent handoff protocol — Zed, Mastra, and others now support it. Formicary's coordinator/worker model maps directly to this pattern: coordinator agent delegates work to a harness-specialized worker. ACP interoperability could let Formicary agents hand off between Claude Code and other harnesses.",
+      "tags": [
+        "multi-agent",
+        "agent-protocols",
+        "ai-coding"
+      ],
+      "img": "https://mastra.ai/api/og/blog?title=Introducing+Agent+Client+Protocol+Support+for+Mastra+Agents&author=Paul+Scanlon&authorImage=paul.png&date=Jun+2%2C+2026&category=features"
+    },
+    {
+      "title": "MAI-Code-1-Flash: Microsoft Ships Its Own First-Party Agentic Coding Model",
+      "link": "https://microsoft.ai/news/introducingmai-code-1-flash/",
+      "updated": "2026-06-03T08:06:15Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Microsoft announced MAI-Code-1-Flash at Build 2026 — its first coding model built end-to-end by Microsoft using clean, appropriately licensed data. The model is described as \"lightweight\" with \"agentic coding\" and \"adaptive solution-length control,\" available in GitHub Copilot and VS Code. Alongside MAI-Thinking-1, this marks Microsoft reducing its exclusive dependency on OpenAI models for developer tooling.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3: Signals Microsoft is building its own model stack for developer tooling — less relevant to Formicary architecture than ACS/ASSERT, but important landscape shift. With Project Polaris (replacing GPT-4 in Copilot Aug 2026) and now MAI-Code-1-Flash, Microsoft is positioning itself for model sovereignty in its developer products. Watch for Formicary model selection strategy as vendor landscape shifts.",
+      "tags": [
+        "ai-coding",
+        "agent-platforms"
+      ],
+      "img": "https://microsoft.ai/wp-content/themes/wp-base-theme/images/social.jpg"
+    },
+    {
+      "title": "Piebald v2.1.161 (+64 tokens): Durable Approval Context, Streaming Pipeline Guidance",
+      "link": "https://github.com/Piebald-AI/claude-code-system-prompts/commit/ba274bd8",
+      "updated": "2026-06-03T08:06:07Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Piebald v2.1.161 makes three prompt changes: (1) Action safety — hard-to-reverse or outward-facing action approvals can now persist across contexts when durable approval context is enabled, while the stricter one-context approval rule applies otherwise; (2) Agent tool usage — subagent-type instructions now key off subagent-type availability rather than message-continuation support; (3) Background monitor streaming — every pipe stage should flush per line; explicitly warns that `head` buffers until enough matches accumulate.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "Score 3: Durable approval context is relevant to Formicary agents that perform multi-step deployments or git pushes across sessions. Streaming flush-per-line guidance prevents buffering issues in agent pipelines. The subagent-type clarification matters for Formicary's coordinator/worker mode.",
+      "tags": [
+        "ai-coding",
+        "multi-agent",
+        "anthropic-platform"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Microsoft ACS + ASSERT: Open Governance Standard for AI Agent Safety — \"The MCP of Agent Safety\"",
+      "link": "https://devblogs.microsoft.com/foundry/build-2026-open-trust-stack-ai-agents/",
+      "updated": "2026-06-03T08:05:56Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "At Build 2026, Microsoft announced two open-source projects: ACS (Agent Control Specification) — an open industry standard for placing deterministic safety and security controls at five checkpoints throughout agentic workflows (input, LLM, state, tool call, output); and ASSERT — a policy-driven agent evaluation framework that generates targeted test scenarios from your organizational policies. ACS is explicitly positioned as \"the MCP or A2A of agent safety.\" Partners at launch: CrewAI, Arize AI, LiteLLM, Pipecat, Pydantic. GitHub: microsoft/agent-governance-toolkit.",
+      "scoreLine": "🐜 Scout — 🔴 5/5 — Direct impact",
+      "rationale": "Score 5: This is the governance layer Formicary needs. ACS provides portable policy files that travel with agents across frameworks — CLAUDE.md is per-harness; ACS is portable across Foundry, MAF, LangChain, etc. ASSERT gives policy-driven eval with inspectable artifacts (spec, cases, outputs, judge rationale) — directly relevant to Formicary's quality-gate agent topology. The MCP/A2A framing suggests industry standardization is coming.",
+      "tags": [
+        "multi-agent",
+        "agent-security",
+        "agent-protocols",
+        "dev-tooling"
+      ],
+      "img": "https://devblogs.microsoft.com/foundry/wp-content/uploads/sites/89/2026/06/Slide1.webp"
+    },
+    {
+      "title": "Claude Code v2.1.161: OTEL Metrics by Team/Repo, Multi-Agent Progress Visibility",
+      "link": "https://github.com/anthropics/claude-code/releases/tag/v2.1.161",
+      "updated": "2026-06-03T08:05:46Z",
+      "published": "Originally published 3 June 2026",
+      "analysis": "Claude Code v2.1.161 (June 2) adds two observability features: OTEL_RESOURCE_ATTRIBUTES values are now included as labels on metric datapoints, so usage metrics can be sliced by custom dimensions like team or repo. The `claude agents` command now shows done/total counts when work is fanned out across subagents, with peek showing the longest-running item.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "Score 4: Direct Formicary impact. OTEL metrics slicing by team/repo = per-container agent attribution. Multi-agent progress visibility in `claude agents` directly serves Formicary's need to monitor fanned-out agent work. Both features close gaps in autonomous agent observability.",
+      "tags": [
+        "ai-coding",
+        "multi-agent",
+        "anthropic-platform"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Sysdig: LLM Agent Weaponized for Post-Exploitation — 4 Pivots from CVE to Internal Database",
+      "link": "https://www.sysdig.com/blog/ai-agent-at-the-wheel-how-an-attacker-used-llms-to-move-from-a-cve-to-an-internal-database-in-4-pivots",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "Sysdig documented a real attack (May 10) where an LLM agent drove post-exploitation after CVE-2026-39987 in Marimo: extracted two cloud credentials, accessed AWS Secrets Manager, retrieved SSH key, launched 8 parallel SSH sessions, and dumped an internal PostgreSQL database — all in ~1 hour. Four Sysdig indicators confirm the agent improvised a database dump, used adaptive API call sequencing, and ran parallel sessions rather than sequential ones. This is the first documented real-world attack using an LLM agent for lateral movement. For Formicary: agents can be weaponized for post-exploitation. Runtime behavioral monitoring — not just static sandboxing — is now required.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "agent-security"
+      ],
+      "img": "https://cdn.prod.website-files.com/681e366f54a6e3ce87159ca4/6a15c054c80c97fce8ffad49_trt-llm-cve-4-pivots.png"
+    },
+    {
+      "title": "OpenAI Codex Auth Tokens Stolen via codexui-android npm Supply Chain Attack",
+      "link": "https://thehackernews.com/2026/06/openai-codex-authentication-tokens.html",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "A popular npm package called codexui-android (29K weekly downloads) had malicious code injected one month after launch that silently exfiltrates Codex authentication tokens from ~/.codex/auth.json to an attacker-controlled server masquerading as Sentry. The stolen refresh_token never expires, giving attackers indefinite Codex access. Package is still available on npm; GitHub repo remains clean. The account associated is \"friuns\" (aka Igor Levochkin). For Formicary: ~.codex/auth.json and similar agent credential caches are high-value targets. Mount these paths read-only or use OS credential stores with short-lived tokens. Pin all npm dependencies with SHA hashes — legitimate-looking packages can be trojaned after building a user base.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "ai-coding"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Anthropic Expands Project Glasswing to 150 Organizations Covering Critical Infrastructure",
+      "link": "https://www.anthropic.com/news/expanding-project-glasswing",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "Anthropic is expanding Project Glasswing — which uses Claude Mythos Preview to scan codebases for vulnerabilities — to ~150 new organizations across 15+ countries. Initial partners have already found 10,000+ high/critical severity flaws. The new cohort covers power, water, healthcare, communications, and hardware sectors plus vendors whose code is relied on by governments worldwide. Anthropic estimates a major attack on most partner codebases could affect 100M+ people. For Formicary: Glasswing is Claude deployed specifically for security scanning at scale. If Claude Mythos access expands beyond Glasswing partners, this capability becomes a natural fit for a Formicary quality-gate or security-agent role.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "anthropic-platform",
+        "agent-security"
+      ],
+      "img": "https://cdn.sanity.io/images/4zrzovbb/website/19e93d85e033d3f992b78cbce2c5a3f60709bd3b-3840x2160.jpg"
+    },
+    {
+      "title": "Microsoft Build 2026 Live: GitHub Copilot Multi-Agent VS Code, Rayfin, GitHub Copilot App",
+      "link": "https://news.microsoft.com/build-2026-live-blog/microsoft-build-2026-live/",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "Microsoft Build 2026 (June 2-3, SF) confirmed: (1) GitHub Copilot Multi-Agent VS Code — orchestrator spawns parallel subagents for linting, test gen, docs, security review simultaneously; (2) GitHub Copilot App (preview) — native desktop app using git worktrees for isolated parallel sessions with pause/resume; (3) Rayfin (open-source SDK/CLI) — generates typed governed backends from natural language, deploys to Microsoft Fabric; (4) Project Polaris replaces GPT-4 Turbo in Copilot from August 2026, with 3-month optional fallback. Microsoft is also developing Project Solara (agent platform for devices). For Formicary: the GitHub Copilot App's git-worktree-per-session pattern validates Formicary's isolated-container-per-agent architecture. Multi-agent VS Code confirms the orchestrator/worker pattern is now standard.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "multi-agent",
+        "ai-coding",
+        "agent-platforms"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Noma Agent Access Control: Discovery and Policy Enforcement for AI Agents and MCP Servers",
+      "link": "https://www.helpnetsecurity.com/2026/06/02/noma-brings-visibility-and-access-governance-to-ai-agents-and-mcp-servers/",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "Noma launched Agent Access Control (June 2) to help enterprises discover, inventory, and enforce access policies across all AI agents and MCP servers. The tool addresses \"shadow agents\" — orgs have gone from a handful to hundreds of agents in under 12 months. Features: automatic inventory, identity establishment, policy enforcement, and AI Detection and Response for runtime verification of policy compliance. CEO quote: \"A single malicious input can redirect an agent's behavior in ways no access policy anticipates, coercing it into misusing legitimately-granted authorization.\" For Formicary: this is the commercial version of the governance layer Formicary needs — enumerate agents, scope permissions, continuously verify at runtime.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "agent-protocols"
+      ],
+      "img": "https://img.helpnetsecurity.com/wp-content/uploads/2024/11/28150559/hns-large_logo.webp"
+    },
+    {
+      "title": "Workday Agent Passport: Continuous Compliance Testing for Enterprise AI Agents (OWASP/NIST/MITRE)",
+      "link": "https://newsroom.workday.com/2026-06-02-Workday-Launches-Agent-Passport-to-Test,-Verify,-and-Continuously-Monitor-Every-AI-Agent-in-the-Enterprise",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "Workday launched Agent Passport (early access H2 2026) to test, verify, and continuously monitor enterprise AI agents against OWASP LLM Top 10, NIST AI RMF, and MITRE ATLAS. Cisco AI Defense is a launch partner. Agent Passport addresses the compliance problem: as agent counts scale, manual verification is infeasible. Alongside this, Workday shipped Developer Agent (AI that writes Workday Extend code) and Agent-Ready Tools (pre-built governed integrations). For Formicary: converging on OWASP/NIST/MITRE as the standard compliance framework for agents is significant — these may become the de facto checklist for regulated-software agent deployments, including medical device development.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "regulated-ai"
+      ],
+      "img": "https://www.stocktitan.net/news_covers/Workday_Launches_Agent_Passport_to_Test_Verify_and_Continuously_Monitor_Every_AI_Agent_in_the_Ente_1065808.webp"
+    },
+    {
+      "title": "White House Executive Order: Promoting Advanced AI Innovation and Security (June 2, 2026)",
+      "link": "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/",
+      "updated": "2026-06-02T18:07:11.320969",
+      "published": "Originally published 2026-06-02T18:07:11.320969",
+      "analysis": "New US executive order (June 2) directs 30-day actions to harden federal systems against AI-era threats: CISA must deploy AI-enabled defensive tools and expand access to frontier models for critical infrastructure; Treasury/NSA/CISA must form an AI cybersecurity clearinghouse to coordinate vulnerability scanning and patch distribution with industry and state/local governments. The order explicitly endorses using AI models offensively for security (vulnerability discovery) and defensively (threat detection). For Formicary: the AI cybersecurity clearinghouse could create new disclosure pathways for AI-discovered vulnerabilities — aligning with Project Glasswing's direction. The EO signals that autonomous AI-driven vulnerability scanning is now US policy.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "regulated-ai",
+        "agent-security"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Claude Code v2.1.160: Security Hardening for Shell Startup Files and Build-Tool Configs",
+      "link": "https://github.com/anthropics/claude-code/releases/tag/v2.1.160",
+      "updated": "2026-06-02T08:08:57.718593",
+      "published": "Originally published 2026-06-02T08:08:57.718593",
+      "analysis": "v2.1.160 adds user prompts before writing to shell startup files (.zshenv, .zlogin, .bash_login) and ~/.config/git/, which could otherwise enable unintended command execution. acceptEdits mode now also prompts before writing build-tool config files (.npmrc, .yarnrc*, bunfig.toml, .bazelrc, .pre-commit-config.yaml, .devcontainer/) that grant code execution. A separate fix lets Edit run without a prior Read when a file was already viewed via grep. Formicary: mount all startup and build-config directories read-only in agent containers — the harness itself now acknowledges these as confirmed attack surface worth a user prompt.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "anthropic-platform",
+        "agent-security"
+      ],
+      "img": "https://opengraph.githubassets.com/3b9de0784ec4becc1e40c7fa289d196597e8e981a39c311d20b52894b9462d14/anthropics/claude-code/releases/tag/v2.1.160"
+    },
+    {
+      "title": "Amazon Bedrock AgentCore GA: AWS's Full Agent Operations Platform Now Production-Ready",
+      "link": "https://aws.amazon.com/blogs/machine-learning/agentops-operationalize-agentic-ai-at-scale-with-amazon-bedrock-agentcore/",
+      "updated": "2026-06-02T08:08:57.718593",
+      "published": "Originally published 2026-06-02T08:08:57.718593",
+      "analysis": "AWS announces general availability of AgentCore as a complete agentic AI platform. It includes: AgentCore Gateway (MCP support, policy enforcement, Lambda interceptors), AgentCore Identity (AWS Secrets Manager integration), AgentCore Payments (agentic transactions via Coinbase and Stripe/Privy), and an AWS Registry for agent and tool discovery. AgentCore is now the default compute environment for Bedrock Managed Agents. Formicary's architecture — Docker isolation, cron scheduling, tool budgets, per-agent credentials — maps to what AgentCore formalizes at enterprise scale. This is the first-party AWS version of what Formicary is building and is worth studying as a reference implementation for the operations layer.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "agent-platforms",
+        "multi-agent",
+        "dev-tooling"
+      ],
+      "img": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/01/19465.png"
+    },
+    {
+      "title": "NCSC + International Partners: Joint Guidance on Careful Adoption of Agentic AI",
+      "link": "https://www.ncsc.gov.uk/blogs/thinking-carefully-before-adopting-agentic-ai",
+      "updated": "2026-06-02T08:08:57.718593",
+      "published": "Originally published 2026-06-02T08:08:57.718593",
+      "analysis": "The UK National Cyber Security Centre, co-authored with international partners, released 'Careful adoption of agentic AI services' — joint government guidance specifically for agentic AI systems. It highlights amplified risks: broader system access, unpredictable behavior, harder-to-spot problems (agents act faster than humans can review), and challenges explaining courses of action. Key advice: start small with tightly bounded pilots on clearly defined low-risk tasks, build confidence incrementally, apply established cyber security controls from the outset. This validates Formicary's cron-paced, Docker-isolated, tightly-scoped agent design — 'start with tightly bounded pilots' describes Formicary's architecture exactly.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "regulated-ai"
+      ],
+      "img": "https://www.ncsc.gov.uk/sites/default/files/styles/uncropped_lg/public/2026-05/Thinking%20carefully%20about%20agentic%20AI%20blog.jpg?itok=96gn9RBj"
+    },
+    {
+      "title": "OpenAI Codex and GPT-5.5 Now GA on Amazon Bedrock — Claude's Coding Agent Rival Ships to the Same Infrastructure",
+      "link": "https://aws.amazon.com/blogs/machine-learning/openai-models-and-codex-on-amazon-bedrock-are-now-generally-available/",
+      "updated": "2026-06-02T08:08:57.718593",
+      "published": "Originally published 2026-06-02T08:08:57.718593",
+      "analysis": "OpenAI's Codex (autonomous coding agent), GPT-5.5, and GPT-5.4 are now generally available on Amazon Bedrock at first-party OpenAI pricing, running on Bedrock's next-generation inference engine with AWS security and governance controls. Usage counts toward existing AWS commitments. AWS calls this 'the beginning of a deeper collaboration between AWS and OpenAI.' Formicary relevance: Claude Code and Codex are now both GA on the same AWS infrastructure platform. This normalizes agent-as-a-service on cloud, confirms the Bedrock/AgentCore stack as the competitive battleground for autonomous coding agents, and reinforces Formicary's choice to build on cloud-managed sandboxes rather than bare-metal.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "agent-platforms"
+      ],
+      "img": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/01/21096.png"
+    },
+    {
+      "title": "Google AlloyDB Remote MCP Server Now GA: First Fully-Managed Cloud MCP Server for Production Agents",
+      "link": "https://cloud.google.com/blog/products/data-analytics/alloydb-remote-mcp-server-ga-secure-ai-agent-access-to-your-data/",
+      "updated": "2026-06-02T08:08:57.718593",
+      "published": "Originally published 2026-06-02T08:08:57.718593",
+      "analysis": "Google Cloud's Remote MCP Server for AlloyDB is now generally available, providing AI agents with secure, enterprise-grade access to operational PostgreSQL data without self-hosting MCP infrastructure. It's the first GA fully-managed remote MCP server from a major cloud provider. The server handles auth, scaling, and connection pooling transparently. Formicary relevance: establishes 'managed remote MCP server' as a production pattern — when Formicary agents need database access, cloud-managed MCP servers eliminate operational overhead while keeping the MCP interface standard. This also signals the MCP ecosystem maturing from self-hosted to cloud-native.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-protocols",
+        "dev-tooling"
+      ],
+      "img": "https://storage.googleapis.com/gweb-cloudblog-publish/images/09_-_Data_Analytics_tFH57V6.max-2600x2600.jpg"
+    },
+    {
+      "title": "Piebald v2.1.160 (+10,510 tokens): DesignSync Tool, Code Review Verification Simplified",
+      "link": "https://github.com/Piebald-AI/claude-code-system-prompts/commit/e6eda87981d3ad50d03dbd1a3b47bcdcb883a7bf",
+      "updated": "2026-06-02T08:08:57.718593",
+      "published": "Originally published 2026-06-02T08:08:57.718593",
+      "analysis": "Claude Code v2.1.160's system prompt adds a new /design-sync slash command and DesignSync tool for syncing React design systems to claude.ai/design (project selection, Storybook builds, validation, incremental uploads). On the code review side, the three-state verification phase (CONFIRMED/PLAUSIBLE/REFUTED) is restructured — the explicit one-vote verification prompt is removed, leaving only recall-biased PLAUSIBLE-by-default guidance; the base finder-angle prompt is narrowed to line-by-line diff scanning. The ultracode keyword remains as workflow opt-in. Formicary: DesignSync shows Anthropic extending Claude Code toward design-to-production workflows; the code-review simplification reduces verification overhead in Formicary review agents but may lower precision on borderline findings.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "anthropic-platform"
+      ],
+      "img": "https://opengraph.githubassets.com/1e04de86b6ad81c75962ef6355b42fa78d6424d0d43b67a9e24734030658045e/Piebald-AI/claude-code-system-prompts/commit/e6eda87981d3ad50d03dbd1a3b47bcdcb883a7bf"
+    },
+    {
+      "title": "Adversa AI: Top Agentic AI Security Resources — June 2026 Roundup",
+      "link": "https://adversa.ai/blog/top-agentic-ai-security-resources-june-2026/",
+      "updated": "2026-06-01T18:08:53Z",
+      "published": "Originally published 1 June 2026",
+      "analysis": "Adversa AI's June 2026 monthly security digest covers the growing wave of agentic AI exploits: zero-click RCE chains in coding agents (Cursor, Kiro, Codex), Microsoft Semantic Kernel flaws, the Copilot 365 persistent backdoor (CVE-2026-24299 — prompt injection + HTML render exfiltration + memory poisoning), and the newest defensive frameworks including Microsoft RAMPART and NVIDIA NemoClaw. The roundup synthesizes the shift from isolated jailbreaks to compound attack chains that persist across sessions via agent memory stores.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "agent-security"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Zero-Click RCE via Prompt Injection in Cursor, Kiro, Codex, and Gemini CLI",
+      "link": "https://cymulate.com/blog/zero-click-rce-prompt-injection-ai-tools/",
+      "updated": "2026-06-01T18:08:41Z",
+      "published": "Originally published 1 June 2026",
+      "analysis": "Cymulate Research Labs disclosed a zero-click RCE chain affecting Cursor CLI, AWS Kiro, Codex Desktop App, and Gemini CLI (CVE details filed with vendors). The attack requires no user interaction beyond opening a project: a malicious repository contains poisoned config files or binary references that trigger prompt injection, which directs the agent to execute a binary-hijacking payload or modify shell execution environment, resulting in code execution. All four vendors were notified; mitigations vary by platform. Published May 13, 2026.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "agent-security",
+        "ai-coding"
+      ],
+      "img": "https://cymulate.com/uploaded-files/2026/05/When-AI-Tools-Become-the-Backdoor_Featured-Image.png"
+    },
+    {
+      "title": "Anthropic Confidentially Files Draft S-1 with SEC — IPO on the Horizon",
+      "link": "https://www.anthropic.com/news/confidential-draft-s1-sec",
+      "updated": "2026-06-01T18:08:30Z",
+      "published": "Originally published 1 June 2026",
+      "analysis": "Anthropic, PBC has confidentially submitted a draft Form S-1 registration statement to the U.S. Securities and Exchange Commission for a proposed initial public offering of common stock. Share count and price have not been set. The filing follows Anthropic's $65B Series H at a $965B post-money valuation and joins the AI IPO wave alongside SpaceX and OpenAI. October 2026 target timeline confirmed by prior reporting.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "anthropic-platform"
+      ],
+      "img": "https://cdn.sanity.io/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg"
+    },
+    {
+      "title": "Miasma: Mini Shai-Hulud Wave 4 Compromises 30+ Red Hat npm Packages with Credential-Stealing Worm",
+      "link": "https://thehackernews.com/2026/06/miasma-supply-chain-attack-compromises.html",
+      "updated": "2026-06-01T18:08:19Z",
+      "published": "Originally published 1 June 2026",
+      "analysis": "A new supply chain attack campaign codenamed Miasma — identified as Mini Shai-Hulud Wave 4 — has compromised over 30 official @redhat-cloud-services npm packages with a credential-stealing worm. The malware runs at install time and harvests GitHub Actions secrets, npm tokens, cloud credentials, Kubernetes/Vault material, SSH keys, and git credentials. Data is exfiltrated via encrypted channels masquerading as api.anthropic[.]com:443/v1/api, with GitHub as a fallback. The attack tools originate from TeamPCP, which open-sourced them after Wave 3 (May 19). The worm self-propagates and includes extortion logic. Avoids Russian-language systems.",
+      "scoreLine": "🐜 Scout — 🔴 5/5 — Direct impact",
+      "rationale": "",
+      "tags": [
+        "agent-security"
+      ],
+      "img": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjOyc2NTiIl0XKOTZBsFh1bTPqNpVXfDhASWkCsYz17d-nbiWVKlxCzoq3WthMD8kMomrRPPOYLM-XRmSdtXNKAxtk1QLtmZH47y2RExMGohBaBDPkpFp2PteUgaA16VcCs7tK-ImqCiLnpqyLg8Pwp6cWE5d9QT2_v0-QBduT7ovYrs7WSZ9t1MnQJ4EuO/s1600/redhat.png"
+    },
+    {
+      "title": "Microsoft Build 2026: Windows Agent Framework Open-Sourced, Project Polaris Replaces OpenAI in Copilot",
+      "link": "https://chatforest.com/builders-log/microsoft-build-2026-recap-windows-agent-platform-project-polaris-copilot-workspace/",
+      "updated": "2026-06-01T08:08:00Z",
+      "published": "Originally published 1 June 2026",
+      "analysis": "Microsoft Build 2026 (June 2-3, Fort Mason, SF) shipped a full agent platform stack with four major announcements: (1) Windows Agent Framework v1.0 MIT-licensed — YAML-defined agents portable across local Windows, Windows 365 Cloud PCs, and Azure Arc edge devices with no re-architecture required; ambient agents run continuously without waiting for prompts. (2) Project Polaris — Microsoft's own mixture-of-experts AI coding model replacing GPT-4 Turbo as the default GitHub Copilot model by August 2026; outperforms GPT-4 Turbo on HumanEval and MBPP, with 100k-line multi-file context and autonomous test generation for Pro tier. (3) Azure Agent Mesh — control plane federating agent execution across on-premises/Windows 365/Azure Arc nodes, routing by latency and GPU availability; Q4 2026 GA. (4) GitHub Copilot Workspace GA with Fleet mode (autonomous CLI operation on bounded tasks) and Autopilot (scheduled background coding without developer present).",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "multi-agent",
+        "ai-coding",
+        "agent-platforms"
+      ],
+      "img": ""
+    },
+    {
+      "title": "ChatGPT for Google Sheets: Indirect Prompt Injection Exfiltrates All Workbooks — HITL Approval Bypassed",
+      "link": "https://www.promptarmor.com/resources/gpt-for-google-sheets-data-exfiltration",
+      "updated": "2026-06-01T08:08:00Z",
+      "published": "Originally published 1 June 2026",
+      "analysis": "PromptArmor documented a critical vulnerability in the ChatGPT for Google Sheets extension: a malicious prompt injected into a single spreadsheet cell causes ChatGPT to silently exfiltrate the entire workbook — and all other workbooks in the victim's account — to an attacker-controlled URL. The attack requires no human interaction. Critically, the attack bypasses explicit HITL controls: even when users had enabled \"require approval before ChatGPT edits workbooks,\" the exfiltration still executes. OpenAI acknowledged the disclosure and confirmed it slipped through their disclosure pipeline. This is the third agent exfiltration-via-outbound-request vulnerability published in a week (following Copilot Cowork+OneDrive on May 26 and Oasis Security Claude.ai on May 27).",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "agent-security"
+      ],
+      "img": ""
+    },
+    {
+      "title": "Kiro Becomes HIPAA Eligible Service — AWS Spec-Driven IDE Clears Regulated Industry Bar",
+      "link": "https://kiro.dev/changelog#2026-05-26-general-hipaa",
+      "updated": "2026-05-31T18:08:21Z",
+      "published": "Originally published 31 May 2026",
+      "analysis": "Kiro (AWS spec-driven IDE) is now included in the AWS HIPAA Eligible Services Reference as of May 26. Organizations subject to HIPAA can use Kiro IDE and CLI as part of compliant workloads. The Kiro Web interface is not included at this time. This follows Kiro v0.12 (May 6) adding parallel task execution and requirements analysis for specs.",
+      "scoreLine": "🐜 Scout — 🟠 4/5 — Highly relevant",
+      "rationale": "",
+      "tags": [
+        "spec-driven",
+        "regulated-ai",
+        "ai-coding",
+        "anthropic-platform"
+      ],
+      "img": "https://kiro.dev/images/opengraph/changelog.png"
+    },
+    {
+      "title": "Kiro CLI v2.5.0: Subagent Review Loops and Thinking Display",
+      "link": "https://kiro.dev/changelog#2026-05-29-cli",
+      "updated": "2026-05-31T18:08:21Z",
+      "published": "Originally published 31 May 2026",
+      "analysis": "Kiro CLI v2.5.0 (May 29) adds thinking display (see the agent reason in real time), subagent review loops (subagent pipelines review and revise their own work before handing it back), and display controls. Also ships Claude Opus 4.8 support (1M context, 128K max output, 2.2x credit multiplier) for Pro, Pro+, and Power users.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "spec-driven",
+        "multi-agent"
+      ],
+      "img": "https://kiro.dev/images/opengraph/changelog.png"
+    },
+    {
+      "title": "Cognition (Devin) Raises $1B at $26B Valuation — $492M ARR, 90% Own Code Written by AI",
+      "link": "https://siliconangle.com/2026/05/27/vibe-coding-startup-cognition-doubles-valuation-new-1b-round/",
+      "updated": "2026-05-31T18:08:21Z",
+      "published": "Originally published 31 May 2026",
+      "analysis": "Cognition, maker of autonomous AI software engineer Devin, raised $1B+ on May 27 at a $26B post-money valuation (led by Lux Capital, General Catalyst, 8VC). Revenue grew from $37M ARR in May 2025 to $492M ARR today — a 13x increase in 12 months. The company reports 90% of its own code is now written by Devin. Windsurf (formerly Codeium) is reportedly acquiring Cognition alongside the round.",
+      "scoreLine": "🐜 Scout — 🟡 3/5 — Worth tracking",
+      "rationale": "",
+      "tags": [
+        "ai-coding",
+        "multi-agent",
+        "agent-platforms"
+      ],
+      "img": "https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2026/05/Code.png"
+    }
+  ]
+}
