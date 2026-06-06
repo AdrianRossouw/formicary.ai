@@ -18,7 +18,7 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-012 | Design tokens as single source of truth | `assets/css/tokens.css` | Manual: diff against `docs/_brief/design_brief/tokens.css` — files identical |
 | REQ-013 | Jekyll shell layout | `_layouts/default.html` | Manual: inspect built HTML for single header/main/footer/skip-link |
 | REQ-014 | Accessible header/nav | `_includes/header.html` | Manual: build each page, confirm `aria-current="page"` on correct link |
-| REQ-015 | Footer | `_includes/footer.html` | Manual: inspect footer for CC BY 4.0 link and copyright string |
+| REQ-015 | Footer | `_includes/footer.html` | Manual: inspect footer for CC BY 4.0 link and author name linked to adrian.rossouw.ie |
 | REQ-016 | Epistemic callout include | `_includes/epistemic.html` | Manual: inspect thesis and about pages for correct callout structure |
 | REQ-017 | Reduced-motion respect | `assets/css/tokens.css` | Manual: enable `prefers-reduced-motion` in DevTools, confirm no animation |
 | REQ-018 | Thesis page essay content | `index.md` | Manual: inspect `_site/index.html` for essay text |
@@ -28,7 +28,7 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-022 | Relevance and tag filtering | `assets/js/scout.js` (`filterItems`, `init`) | Automated: `tests/scout.test.js` REQ-035 filterItems tests; manual: browser filter interaction |
 | REQ-023 | About page copy and disclosure | `about.md`, `_includes/epistemic.html` | Manual: inspect `_site/about/index.html` for disclosure callout before prose |
 | REQ-024 | Two-column is/isn't block | `about.md` | Manual: inspect at 720px+ (two columns) and below (single column) |
-| REQ-025 | Contact section | `about.md` | Manual: inspect `dl.bio-grid` for correct email and links |
+| REQ-025 | Contact section | `about.md` | Manual: inspect `dl.bio-grid` for email, personal link to adrian.rossouw.ie, writing, feed, licence rows |
 | REQ-026 | Requirements document | `docs/requirements.md` | Manual: file exists and contains REQ-001 through REQ-036 |
 | REQ-027 | Traceability table | `docs/traceability.md`, `scripts/check-traceability.js` | Automated: CI runs `node scripts/check-traceability.js` on every push; exits 1 if any REQ-ID is untraced |
 | REQ-028 | Hazard register | `docs/hazards.md` | Manual: four seeded hazards with controls and REQ-ID references present |

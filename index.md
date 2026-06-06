@@ -8,7 +8,7 @@ description: Applied research on whether regulated-software discipline makes AI-
   <p class="kicker masthead__eyebrow">The thesis &nbsp;&middot;&nbsp; pre-experiment</p>
   <h1 class="masthead__title">What survives the agent</h1>
   <p class="masthead__deck">Borrowing regulated-software discipline to make AI code last.</p>
-  <p class="masthead__byline">Adrian Rossouw &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; working notes</p>
+  <p class="masthead__byline"><a href="https://adrian.rossouw.ie">Adrian Rossouw</a> &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; working notes</p>
 </div>
 
 {% include epistemic.html
