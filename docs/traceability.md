@@ -13,7 +13,7 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-007 | Loading, empty, and error states | `assets/js/scout.js` (`init`) | Manual: browser — throttle network for loading; clear filter for empty; block URL for error |
 | REQ-008 | Accessible markup and landmarks | `_layouts/default.html`, `_includes/header.html`, `scout.html` | Manual: inspect rendered HTML for skip link, landmarks, `aria-current`, `<ol>/<li>/<h2>/<time>` |
 | REQ-009 | Theme toggle, no-flash, localStorage | `assets/js/theme.js`, `_layouts/default.html` | Manual: set dark in DevTools Storage, reload — no white flash; toggle persists |
-| REQ-010 | GitHub Actions deploy workflow | `.github/workflows/deploy.yml` | CI: push to main triggers successful deploy |
+| REQ-010 | GitHub Actions deploy workflow | `.github/workflows/deploy.yml` | CI: push to main runs tests, traceability check, Jekyll build, and Pages deploy |
 | REQ-011 | Jekyll project structure | `Gemfile`, `_config.yml` | Manual: `bundle exec jekyll build` succeeds |
 | REQ-012 | Design tokens as single source of truth | `assets/css/tokens.css` | Manual: diff against `docs/_brief/design_brief/tokens.css` — files identical |
 | REQ-013 | Jekyll shell layout | `_layouts/default.html` | Manual: inspect built HTML for single header/main/footer/skip-link |
@@ -30,7 +30,7 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-024 | Two-column is/isn't block | `about.md` | Manual: inspect at 720px+ (two columns) and below (single column) |
 | REQ-025 | Contact section | `about.md` | Manual: inspect `dl.bio-grid` for correct email and links |
 | REQ-026 | Requirements document | `docs/requirements.md` | Manual: file exists and contains REQ-001 through REQ-036 |
-| REQ-027 | Traceability table | `docs/traceability.md` | Manual: every REQ-ID in requirements.md has a row here |
+| REQ-027 | Traceability table | `docs/traceability.md`, `scripts/check-traceability.js` | Automated: CI runs `node scripts/check-traceability.js` on every push; exits 1 if any REQ-ID is untraced |
 | REQ-028 | Hazard register | `docs/hazards.md` | Manual: four seeded hazards with controls and REQ-ID references present |
 | REQ-029 | SOUP register | `docs/soup.md` | Manual: all external components listed with version and purpose |
 | REQ-030 | REQ-ID commit convention | `docs/requirements.md` (documented), git log | Manual: `git log --oneline` confirms REQ-ID pattern in commit messages |
