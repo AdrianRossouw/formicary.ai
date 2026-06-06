@@ -50,7 +50,8 @@ permalink: /about/
 <section>
   <p class="kicker" style="margin-bottom: var(--space-4);">Contact</p>
   <dl class="bio-grid">
-    <dt>Email</dt><dd><a href="mailto:adrian@formicary.ai">adrian@formicary.ai</a></dd>
+    <dt>Email</dt><dd><a href="mailto:formicary@localghost.ie">formicary@localghost.ie</a></dd>
+    <dt>Personal</dt><dd><a href="https://adrian.rossouw.ie">adrian.rossouw.ie</a></dd>
     <dt>Writing</dt><dd>The <a href="/">thesis essay</a> is the place to start.</dd>
     <dt>Feed</dt><dd><a href="/scout/">Scout</a> updates twice daily.</dd>
     <dt>Licence</dt><dd>Notes are <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. Reuse with attribution.</dd>
