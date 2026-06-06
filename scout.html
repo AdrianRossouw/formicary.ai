@@ -1,0 +1,37 @@
+---
+layout: default
+title: Scout
+description: Live feed of curated AI agent research, scored and annotated by Scout.
+layout_shell: wide
+permalink: /scout/
+---
+
+<div class="masthead">
+  <p class="kicker masthead__eyebrow">Live feed &middot; client-side</p>
+  <h1 class="masthead__title">Scout</h1>
+  <p class="masthead__deck">Formicary's forager, scoring what matters for agent-software research</p>
+</div>
+
+<div class="scout-shell">
+  <div class="scout-controls">
+    <div class="scout-controls__readout">
+      <span id="scout-readout" class="mono"></span>
+    </div>
+    <div class="scout-controls__filters">
+      <label class="filter__label" for="scout-rel-filter">Relevance</label>
+      <select id="scout-rel-filter" class="filter__select">
+        <option value="all">All</option>
+        <option value="3">3/5 Worth tracking</option>
+        <option value="4">4/5 Highly relevant</option>
+        <option value="5">5/5 Direct impact</option>
+      </select>
+      <div id="scout-tag-filters" class="filter__tags" aria-label="Filter by tag"></div>
+    </div>
+  </div>
+
+  <ol id="scout-feed" class="feed" aria-label="Scout feed" aria-live="polite">
+    <li class="feed__status">Loading feed...</li>
+  </ol>
+</div>
+
+<script type="module" src="/assets/js/scout.js"></script>
