@@ -1,0 +1,30 @@
+title: formicary.ai
+description: Applied research on AI coding techniques and regulated-software discipline.
+url: "https://formicary.ai"
+baseurl: ""
+
+author:
+  name: Adrian Rossouw
+
+plugins:
+  - jekyll-seo-tag
+
+exclude:
+  - docs/
+  - Gemfile
+  - Gemfile.lock
+  - openspec/
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - vitest.config.js
+  - tests/
+  - README.md
+  - "*.sh"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+sass:
+  style: compressed

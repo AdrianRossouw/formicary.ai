@@ -1,0 +1,9 @@
+.mcp.json
+_site/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+node_modules/
+vendor/
+.bundle/
+.DS_Store
