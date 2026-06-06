@@ -1,5 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>{{ page.title }}</title></head>
-<body>{{ content }}</body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} — formicary.ai{% else %}formicary.ai{% endif %}</title>
+  <!-- theme.js before CSS: applies saved preference before first paint (REQ-009) -->
+  <script src="/assets/js/theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  {% seo %}
+</head>
+<body>
+  <a class="visually-hidden" href="#main-content">Skip to content</a>
+
+  {% include header.html %}
+
+  <main id="main-content">
+    {% assign shell_class = page.layout_shell | default: "shell" %}
+    {% if shell_class == "wide" %}
+      <div class="shell shell--wide">
+        {{ content }}
+      </div>
+    {% else %}
+      <div class="shell">
+        {{ content }}
+      </div>
+    {% endif %}
+  </main>
+
+  {% include footer.html %}
+</body>
 </html>
