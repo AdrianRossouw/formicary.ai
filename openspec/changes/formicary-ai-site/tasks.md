@@ -91,3 +91,8 @@
 
 - [ ] 10.1 Add a bash step to `.github/workflows/deploy.yml` that extracts REQ-IDs from `docs/requirements.md` and verifies each appears in `docs/traceability.md`; fails the build if any are untraced
 - [ ] 10.2 Commit (`feat: ci traceability enforcement step`) only if all other tasks are complete and ship is not at risk
+
+## 11. Simplify
+
+- [ ] 11.1 Run `/simplify` across the codebase
+- [ ] 11.2 Commit simplifications in a dedicated commit, separate from feature work
