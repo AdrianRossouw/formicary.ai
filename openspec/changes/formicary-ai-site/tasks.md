@@ -46,7 +46,7 @@
 - [x] 6.4 Verify masthead renders title and deck as a pair with accent keyline [REQ-019]
 - [x] 6.5 Verify no em-dashes in masthead, callout, or nav [REQ-005]
 - [x] 6.6 Update `docs/traceability.md` for REQ-002, REQ-005, REQ-018, REQ-019
-- [ ] 6.7 Commit (`feat(REQ-002,REQ-005,REQ-018,REQ-019): thesis landing page with epistemic callout`) and merge to `main`
+- [x] 6.7 Commit (`feat(REQ-002,REQ-005,REQ-018,REQ-019): thesis landing page with epistemic callout`) and merge to `main`
 
 ## 7. Scout page (feat/scout-page)
 
@@ -61,7 +61,7 @@
 - [x] 7.9 Verify live feed loads and renders cards in a browser [REQ-003]
 - [x] 7.10 Verify unpinned URL (no SHA) in `scout.js` source [REQ-003]
 - [x] 7.11 Update `docs/traceability.md` for REQ-003, REQ-004, REQ-007, REQ-008, REQ-020, REQ-021, REQ-022
-- [ ] 7.12 Commit (`feat(REQ-003,REQ-004,REQ-007,REQ-008,REQ-020,REQ-021,REQ-022): scout page with safe client-side feed render`) and merge to `main`
+- [x] 7.12 Commit (`feat(REQ-003,REQ-004,REQ-007,REQ-008,REQ-020,REQ-021,REQ-022): scout page with safe client-side feed render`) and merge to `main`
 
 ## 8. Scout tests (feat/scout-page, same branch)
 
@@ -75,7 +75,7 @@
 - [x] 8.8 Write REQ-004 safety assertion: `<script>` tag in analysis does not produce a script element [REQ-036]
 - [x] 8.9 Run `npm test`; all tests pass [REQ-031]
 - [x] 8.10 Update `docs/traceability.md` for REQ-031 through REQ-036; mark REQ-004 verified by test [REQ-027]
-- [ ] 8.11 Commit (`test(REQ-031,REQ-032,REQ-033,REQ-034,REQ-035,REQ-036): vitest suite for scout parsing and filter logic`) and merge to `main`
+- [x] 8.11 Commit (`test(REQ-031,REQ-032,REQ-033,REQ-034,REQ-035,REQ-036): vitest suite for scout parsing and filter logic`) and merge to `main`
 
 ## 9. About page (feat/about-page)
 
@@ -85,7 +85,7 @@
 - [x] 9.4 Implement contact section as `dl.bio-grid` with correct email and links [REQ-025]
 - [x] 9.5 Verify single-column collapse below 720px [REQ-024]
 - [x] 9.6 Update `docs/traceability.md` for REQ-023, REQ-024, REQ-025
-- [ ] 9.7 Commit (`feat(REQ-023,REQ-024,REQ-025): about page with disclosure and contact`) and merge to `main`
+- [x] 9.7 Commit (`feat(REQ-023,REQ-024,REQ-025): about page with disclosure and contact`) and merge to `main`
 
 ## 10. Stretch: CI traceability check
 
