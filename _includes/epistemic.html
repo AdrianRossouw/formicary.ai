@@ -1,4 +1,4 @@
-<aside class="epistemic" aria-label="{{ include.label }}">
+<aside class="epistemic"{% if include.style %} style="{{ include.style }}"{% endif %} aria-label="{{ include.label }}">
   <p class="epistemic__label">{{ include.label }}</p>
   {% if include.status or include.confidence or include.last_revised %}
   <dl class="epistemic__fields">
