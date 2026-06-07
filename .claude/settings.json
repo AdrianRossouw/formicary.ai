@@ -29,6 +29,16 @@
             "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks claude-code pre-task'"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit*)",
+            "command": "jq -r '.tool_input.command' | grep -q 'git commit' && printf '%s\\n' '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"AGENTS.md pre-commit checklist:\\n1. Am I on a named branch (not main)?\\n2. Does the subject follow type(REQ-NNN,...): imperative description?\\n3. Does the REQ-ID list cover every requirement whose implementing files appear in git diff --stat? (grep docs/requirements.md if unsure)\\n4. Is the subject under ~72 characters?\\n5. Does the subject describe the what, not the tool or session that prompted it?\"}}' || true"
+          }
+        ]
       }
     ],
     "SessionEnd": [
