@@ -143,17 +143,17 @@ Items are sorted newest-first by `updated`.
 
 Weekly roundup entries exist alongside regular item entries in the same feed. Detection and parsing differ.
 
-### Detection
+### Detection and handling
 
-A weekly entry is identified by its `<id>` (or `<link href>`) containing the path segment `/scout/weekly/`:
+A weekly entry is identified by its `<id>` containing the path segment `/scout/weekly/`:
 
 ```xml
 <id>https://formicary.dev/scout/weekly/2026-06-07</id>
 ```
 
-**Note:** A `<category term="weekly-roundup" scheme="https://formicary.ai/feed/types"/>` element is recommended as an explicit machine-readable marker and should be added to Scout output in a future release. Until then, URL-based detection is the fallback.
+**`parseFeed` silently drops weekly entries.** They do not appear in the returned item array and are not rendered on the Scout page. The weekly digest is available at its canonical URL.
 
-Weekly entries do **not** contain a score block. The `parseSummaryHtml` function is not called for weekly entries.
+A `<category term="weekly-roundup" scheme="https://formicary.ai/feed/types"/>` element is recommended as an explicit machine-readable marker for a future Scout release — useful if weekly entries are ever rendered rather than filtered.
 
 ### Weekly entry Atom fields
 
