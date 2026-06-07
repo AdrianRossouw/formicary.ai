@@ -177,7 +177,44 @@ describe('parseFeed', () => {
   it('throws for malformed XML', () => {
     expect(() => parseFeed('<not valid xml <<')).toThrow();
   });
+
+  it('filters weekly entries — feed with one weekly and two regular returns 2 items (REQ-040)', () => {
+    const items = parseFeed(FIXTURE_ATOM_WITH_WEEKLY);
+    expect(items).toHaveLength(2);
+    expect(items.every(i => !i.url.includes('/scout/weekly/'))).toBe(true);
+  });
 });
+
+// ─── Weekly entry fixture ─────────────────────────────────────────────────────
+
+const FIXTURE_WEEKLY_SUMMARY = `<div><p>2026-06-07</p><p>Weekly roundup.</p><div><p>🐜 Scout — 🟡 3/5 — Worth tracking</p><p>Rationale.</p><p><span>ai-coding</span></p></div></div>`;
+
+const FIXTURE_ATOM_WITH_WEEKLY = `<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Formicary Scout</title>
+  <updated>2026-06-07T12:00:00Z</updated>
+  <entry>
+    <title>Weekly Scout Roundup</title>
+    <link href="https://formicary.dev/scout/weekly/2026-06-07" rel="alternate"/>
+    <id>https://formicary.dev/scout/weekly/2026-06-07</id>
+    <updated>2026-06-07T12:00:00Z</updated>
+    <summary type="html">${escXml(FIXTURE_WEEKLY_SUMMARY)}</summary>
+  </entry>
+  <entry>
+    <title>Agent TDD Skill</title>
+    <link href="https://example.com/tdd" rel="alternate"/>
+    <id>https://example.com/tdd</id>
+    <updated>2026-06-06T08:06:43Z</updated>
+    <summary type="html">${escXml(FIXTURE_SUMMARY_1)}</summary>
+  </entry>
+  <entry>
+    <title>AI Agent Uncovers Zero-Days</title>
+    <link href="https://example.com/zeroday" rel="alternate"/>
+    <id>https://example.com/zeroday</id>
+    <updated>2026-06-06T08:06:38Z</updated>
+    <summary type="html">${escXml(FIXTURE_SUMMARY_4)}</summary>
+  </entry>
+</feed>`;
 
 // ─── filterItems ─────────────────────────────────────────────────────────────
 

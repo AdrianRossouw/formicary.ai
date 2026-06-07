@@ -43,7 +43,11 @@ export function parseFeed(xmlString) {
   const doc = new DOMParser().parseFromString(xmlString, 'application/xml');
   if (doc.querySelector('parsererror')) throw new Error('Feed XML could not be parsed');
   const ns = 'http://www.w3.org/2005/Atom';
-  const entries = Array.from(doc.getElementsByTagNameNS(ns, 'entry'));
+  const entries = Array.from(doc.getElementsByTagNameNS(ns, 'entry'))
+    .filter(entry => {
+      const id = entry.getElementsByTagNameNS(ns, 'id')[0]?.textContent?.trim() ?? '';
+      return !id.includes('/scout/weekly/');
+    });
   const items = entries.map(entry => {
     const el = name => entry.getElementsByTagNameNS(ns, name)[0];
     const title = el('title')?.textContent?.trim() ?? '';

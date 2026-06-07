@@ -5,21 +5,21 @@
 
 ## 2. Implementation — filter in parseFeed
 
-- [ ] 2.1 In `assets/js/scout.js`, inside `parseFeed(xmlString)`: after parsing each entry's `<id>`, add `if (id.includes('/scout/weekly/')) continue;` to drop weekly entries before they are pushed to the result array
+- [x] 2.1 In `assets/js/scout.js`, inside `parseFeed(xmlString)`: after parsing each entry's `<id>`, add `if (id.includes('/scout/weekly/')) continue;` to drop weekly entries before they are pushed to the result array
 
 ## 3. Tests
 
-- [ ] 3.1 In `tests/scout.test.js`, add a weekly entry fixture: an Atom XML `<entry>` with `<id>https://formicary.dev/scout/weekly/2026-06-07</id>` and a minimal `<summary type="html">`
-- [ ] 3.2 Add a `parseFeed` test: a feed with one weekly entry and two regular entries returns an array of length 2 containing only the regular entries
-- [ ] 3.3 Run `npm test` — all tests pass
+- [x] 3.1 In `tests/scout.test.js`, add a weekly entry fixture: an Atom XML `<entry>` with `<id>https://formicary.dev/scout/weekly/2026-06-07</id>` and a minimal `<summary type="html">`
+- [x] 3.2 Add a `parseFeed` test: a feed with one weekly entry and two regular entries returns an array of length 2 containing only the regular entries
+- [x] 3.3 Run `npm test` — all tests pass
 
 ## 4. Requirements and traceability
 
-- [ ] 4.1 Add REQ-040 to `docs/requirements.md`: `parseFeed` SHALL silently drop entries whose `<id>` contains `/scout/weekly/`
-- [ ] 4.2 Update REQ-020 in `docs/requirements.md` to mention the weekly entry filter
-- [ ] 4.3 Update REQ-032 in `docs/requirements.md` to mention the weekly entry filter test
-- [ ] 4.4 Add REQ-040 row to `docs/traceability.md` pointing to `assets/js/scout.js` and `tests/scout.test.js`
-- [ ] 4.5 Run `npm test` — traceability check passes
+- [x] 4.1 Add REQ-040 to `docs/requirements.md`: `parseFeed` SHALL silently drop entries whose `<id>` contains `/scout/weekly/`
+- [x] 4.2 Update REQ-020 in `docs/requirements.md` to mention the weekly entry filter
+- [x] 4.3 Update REQ-032 in `docs/requirements.md` to mention the weekly entry filter test
+- [x] 4.4 Add REQ-040 row to `docs/traceability.md` pointing to `assets/js/scout.js` and `tests/scout.test.js`
+- [x] 4.5 Run `npm test` — traceability check passes
 
 ## 5. Commit and merge
 
