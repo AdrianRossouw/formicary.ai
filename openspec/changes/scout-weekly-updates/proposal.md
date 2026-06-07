@@ -1,31 +1,27 @@
 ## Why
 
-Scout will emit a new entry type — weekly roundup entries — alongside regular item entries in the existing Atom feed. The site currently has no way to detect or render these; without handling them they will either render broken as item cards or be silently ignored.
+Scout now emits weekly roundup entries alongside regular item entries in the existing Atom feed (confirmed in live feed 2026-06-07). The site currently has no detection for these; without handling, they render broken as item cards with empty score fields.
 
 ## What Changes
 
-- The Atom feed gains a new entry type distinguishable from regular item entries (e.g. via a `<category>` term or a distinct summary structure).
-- `parseFeed` and `parseSummaryHtml` in `assets/js/scout.js` are updated to detect and parse weekly entries into a new item shape.
-- The Scout page renders weekly entries as a distinct card style — digest format, not a single-article card.
-- `docs/scout-feed-format.md` (REQ-039) is updated to document the weekly entry format as part of the feed interface contract.
-- The test fixture and test suite are extended to cover the new entry type.
+- `parseFeed` in `assets/js/scout.js` is updated to detect and silently drop weekly entries before they reach the renderer.
+- The test suite is extended to verify that weekly entries are filtered out.
+- `docs/scout-feed-format.md` (REQ-039) is updated to document the filtering decision.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `scout-weekly-card`: Detect weekly roundup entries in the feed and render them as a distinct digest card on the Scout page.
+- None.
 
 ### Modified Capabilities
 
-- `scout-page`: Feed parsing logic (`parseFeed`, `parseSummaryHtml`) gains a new entry type; the Scout page renderer handles the new card variant.
-- `scout-tests`: Test fixture and coverage extended to include weekly entry parsing and rendering.
+- `scout-page`: `parseFeed` gains weekly entry filtering — entries whose `<id>` contains `/scout/weekly/` are dropped before the item array is returned.
+- `scout-tests`: Test coverage extended to verify weekly entries are filtered.
 
 ## Impact
 
-- `assets/js/scout.js` — `parseFeed`, `parseSummaryHtml`, card renderer
-- `tests/scout.test.js` — fixture and test cases
+- `assets/js/scout.js` — `parseFeed` only (one guard condition)
+- `tests/scout.test.js` — one new fixture + one new test case
 - `docs/scout-feed-format.md` — feed interface contract (REQ-039)
-- `scout.html` — may need CSS class additions if weekly card requires distinct styling
-- `assets/css/tokens.css` — no changes expected; weekly card reuses existing design tokens
-- No dependency or build changes required
+- No CSS, HTML, build, or dependency changes required
