@@ -23,7 +23,7 @@ description: Applied research on whether regulated-software discipline makes AI-
 <hr class="rule-mark" />
 
 <div class="prose">
-  <p class="lede">You can build a working SaaS application in a weekend with an AI agent now. That is new, and on its own it is a party trick. The interesting question about AI-assisted software is not what gets shipped on Sunday night. It is what the code looks like in year three, when the original author is gone, when the requirements have drifted twice, when something has broken in production and somebody has to figure out what the agent was thinking when it wrote the function that is now on fire.</p>
+  <p class="lede">You can build a working SaaS application in a weekend with an AI agent now. That is new, but the interesting question about AI-assisted software is not what gets shipped on Sunday night. It is what the code looks like in year three, when the original author is gone, when the requirements have drifted twice, when something has broken in production and somebody has to figure out what the agent was thinking when it wrote the function that is now on fire.</p>
 
   <p>That is the long tail of software. It is where most of the cost lives, where most of the value lives, and where AI-assisted code currently fails worst. A weekend prototype that nobody can maintain is not a productivity gain. It is technical debt at unprecedented velocity. If AI is going to matter for software in a way that compounds, it has to make the long tail better, not just the launch faster.</p>
 
