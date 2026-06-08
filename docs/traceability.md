@@ -44,3 +44,4 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-038 | Sitemap generation | `Gemfile`, `_config.yml` | Manual: `bundle exec jekyll build` then confirm `_site/sitemap.xml` exists and lists all pages |
 | REQ-039 | Scout feed format contract | `docs/scout-feed-format.md`, `assets/js/scout.js` | Manual: confirm document exists and matches parsing logic in `parseFeed` and `parseSummaryHtml` |
 | REQ-040 | parseFeed drops weekly entries | `assets/js/scout.js` (`parseFeed`), `tests/scout.test.js` | Automated: `npm test` — parseFeed weekly filter test passes |
+| REQ-041 | Mobile override block in tokens.css | `assets/css/tokens.css` | Automated: `npm test` — traceability check; Manual: verify `@media (max-width: 640px)` block present in `assets/css/tokens.css` |

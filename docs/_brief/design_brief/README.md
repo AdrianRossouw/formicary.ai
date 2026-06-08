@@ -211,7 +211,8 @@ Score→label map in the page: `5 → "Direct impact"`, `4 → "Highly relevant"
 ---
 
 ## Assets
-- **No images, icons, or SVG files.** All visual marks (signal pips, theme disc, accent dots/keylines, list glyphs, the `#` on tags, the `→` arrow) are pure CSS or text characters.
+- **Favicon / app icon.** The wordmark's lowercase *f* (Newsreader, weight 560, paper-on-pine tile, 13/64 corner radius) rendered from the live font. Files: `favicon.svg` (scalable; serif-stack fallback for systems without Newsreader), `favicon-16.png` / `favicon-32.png` / `favicon-48.png`, and `apple-touch-icon.png` (180px). Wired into every page's `<head>`. To regenerate at other sizes, rasterize the *f* on a pine `#2c7a58` tile with paper `#f7f9f7` text. A 512px PWA icon was not generated — add `icon-512.png` if a web-app manifest is needed.
+- **No other images, icons, or SVG files.** All visual marks (signal pips, theme disc, accent dots/keylines, list glyphs, the `#` on tags, the `→` arrow) are pure CSS or text characters.
 - **Fonts:** Google Fonts — Newsreader, IBM Plex Sans, IBM Plex Mono (imported in `tokens.css`). Self-host if the target environment prefers it.
 - **Feed data:** `scout-feed.js` / `scout-feed.json` (auto-generated from an Atom feed upstream — treat as a build input, not hand-edited).
 
@@ -219,10 +220,11 @@ Score→label map in the page: `5 → "Direct impact"`, `4 → "Highly relevant"
 - `index.html` — Thesis page.
 - `scout.html` — Scout feed page (includes the inline render/filter script).
 - `about.html` — About page.
-- `tokens.css` — **the design system.** Single source of truth for fonts, type scale, color (OKLCH, dark + light), spacing, layout, motion, and every component's styles.
-- `theme.js` — dark/light theme toggle + persistence (loaded in `<head>`).
+- `tokens.css` — **the design system.** Single source of truth for fonts, type scale, color (OKLCH, light + dark), spacing, layout, motion, and every component's styles.
+- `theme.js` — light/dark theme toggle + persistence (loaded in `<head>`).
 - `scout-feed.js` — `window.SCOUT` feed data (render-ready).
 - `scout-feed.json` — same feed data as JSON.
+- `favicon.svg`, `favicon-16.png`, `favicon-32.png`, `favicon-48.png`, `apple-touch-icon.png` — site icons (the wordmark *f*).
 
 ## Notes for the implementer
 - Keep the **single-accent, no-shadow, hairline-and-spacing** discipline — it's the whole aesthetic. Resist adding cards, gradients, or elevation.

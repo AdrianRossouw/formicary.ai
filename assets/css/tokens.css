@@ -526,6 +526,22 @@ p { text-wrap: pretty; }
 .isnt-list .isnt .mark { color: var(--ink-faint); }
 
 /* =========================================================================
+   Mobile overrides  (≤ 640px)
+   ========================================================================= */
+@media (max-width: 640px) {
+  /* Masthead: desktop spacing is too generous above the fold on small screens */
+  .masthead { padding-top: var(--space-5); }
+  .masthead__eyebrow { margin-bottom: var(--space-3); }
+
+  /* Readout: separators float awkwardly when the bar wraps to multiple lines */
+  .readout__sep { display: none; }
+
+  /* Nav: tighten gap so wordmark + links + toggle all fit comfortably */
+  .site-head__right { gap: var(--space-3); }
+  .nav { gap: var(--space-3); }
+}
+
+/* =========================================================================
    Reduced motion
    ========================================================================= */
 @media (prefers-reduced-motion: reduce) {
