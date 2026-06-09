@@ -23,7 +23,7 @@ description: Applied research on whether regulated-software discipline makes AI-
 <hr class="rule-mark" />
 
 <div class="prose">
-  <p class="lede">You can build a working app in a weekend with an AI agent. Whether it still stands in year three is the harder question, and the more expensive one. Regulated industries spent forty years working out how to make fallible builders produce software that lasts. Formicary tests the artifact-shaped part of that discipline on AI coding agents, and measures what helps. Working notes, in public, one experiment at a time.</p>
+  <p class="standfirst">You can build a working app in a weekend with an AI agent. Whether it still stands in year three is the harder question, and the more expensive one. Regulated industries spent forty years working out how to make fallible builders produce software that lasts. Formicary tests the artifact-shaped part of that discipline on AI coding agents, and measures what helps. Working notes, in public, one experiment at a time.</p>
 
   <h2>The hard part comes later</h2>
 
