@@ -29,7 +29,7 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-023 | About page copy and disclosure | `about.md`, `_includes/epistemic.html` | Manual: inspect `_site/about/index.html` for disclosure callout before prose |
 | REQ-024 | Two-column is/isn't block | `about.md` | Manual: inspect at 720px+ (two columns) and below (single column) |
 | REQ-025 | Contact section | `about.md` | Manual: inspect `dl.bio-grid` for email, personal link to adrian.rossouw.ie, writing, feed, licence rows |
-| REQ-026 | Requirements document | `docs/requirements.md` | Manual: file exists and contains REQ-001 through REQ-036 |
+| REQ-026 | Requirements document | `docs/requirements.md` | Manual: file exists and contains all REQ-NNN entries |
 | REQ-027 | Traceability table | `docs/traceability.md`, `scripts/check-traceability.js` | Automated: CI runs `node scripts/check-traceability.js` on every push; exits 1 if any REQ-ID is untraced |
 | REQ-028 | Hazard register | `docs/hazards.md` | Manual: four seeded hazards with controls and REQ-ID references present |
 | REQ-029 | SOUP register | `docs/soup.md` | Manual: all external components listed with version and purpose |
@@ -45,3 +45,5 @@ Maps each REQ-ID to its implementing file(s) and verification method. Updated as
 | REQ-039 | Scout feed format contract | `docs/scout-feed-format.md`, `assets/js/scout.js` | Manual: confirm document exists and matches parsing logic in `parseFeed` and `parseSummaryHtml` |
 | REQ-040 | parseFeed drops weekly entries | `assets/js/scout.js` (`parseFeed`), `tests/scout.test.js` | Automated: `npm test` — parseFeed weekly filter test passes |
 | REQ-041 | Mobile override block in tokens.css | `assets/css/tokens.css` | Automated: `npm test` — traceability check; Manual: verify `@media (max-width: 640px)` block present in `assets/css/tokens.css` |
+| REQ-042 | `.standfirst` CSS component | `assets/css/tokens.css` | Manual: inspect `.standfirst` rule in `assets/css/tokens.css` for all specified properties |
+| REQ-043 | Thesis essay section headings | `index.md` | Manual: inspect `_site/index.html` for one or more `<h2>` elements inside `.prose` |

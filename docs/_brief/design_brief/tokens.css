@@ -290,9 +290,21 @@ p { text-wrap: pretty; }
   width: 4ch; margin-block: var(--space-7); margin-inline: 0;
 }
 
-/* lede */
+/* lede — intro paragraph on Scout/About */
 .lede {
   font-size: var(--fs-lead); line-height: 1.5; color: var(--ink-soft);
+}
+
+/* standfirst — essay opening paragraph: italic, large, full ink */
+.standfirst {
+  font-size: clamp(1.45rem, 2.8vw, 1.85rem);
+  font-style: italic;
+  line-height: 1.42;
+  color: var(--ink);
+  max-width: 46ch;
+  text-wrap: balance;
+  letter-spacing: -0.006em;
+  margin-bottom: var(--space-2);
 }
 
 /* =========================================================================
