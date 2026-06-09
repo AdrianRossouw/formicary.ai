@@ -55,7 +55,9 @@ description: Applied research on whether regulated-software discipline makes AI-
 
   <h2>Whether is settled. Which isn&rsquo;t.</h2>
 
-  <p>None of this is happening in a vacuum, and some of it is already happening well. Spec-driven development has become the mainstream answer to unreliable agent output: write the specification first, then let it drive the plan, the tasks, and the code. Tooling like GitHub&rsquo;s Spec-Kit has turned spec-as-source from a fringe idea into a standard workflow with a large following. That movement has more or less settled the general question. Structured artifacts make agents more reliable. So the useful question now is not whether, but which. Spec-driven development leans on the specification and little else, while the wider vocabulary the regulated industries spent forty years building has barely entered agent workflows at all. The question I care about is narrow and practical: of those techniques, which ones actually improve outcomes, and by how much?</p>
+  <p>None of this is happening in a vacuum, and some of it is already happening well. Spec-driven development has become the mainstream answer to unreliable agent output: write the specification first, then let it drive the plan, the tasks, and the code. Tooling like GitHub&rsquo;s Spec-Kit has turned spec-as-source from a fringe idea into a standard workflow with a large following. That movement has more or less settled the general question. Structured artifacts make agents more reliable.</p>
+
+  <p>So the useful question now is not whether, but which. Spec-driven development leans on the specification and little else, while the wider vocabulary the regulated industries spent forty years building has barely entered agent workflows at all. The question I care about is narrow and practical: of those techniques, which ones actually improve outcomes, and by how much?</p>
 
   <h2>Start with the cheapest technique</h2>
 
@@ -73,7 +75,9 @@ description: Applied research on whether regulated-software discipline makes AI-
 
   <h2>Who&rsquo;s writing this</h2>
 
-  <p>I have spent the last five years as VP of Information Systems and Product at Renalytix, leading the technology organisation behind an FDA De Novo-authorized AI diagnostic, running a software group under ISO 13485 and ISO 27001, and shipping production EHR integrations with major US health systems. I know which clauses of these standards live in artifacts and which live in management review meetings, because I have been audited under both. That is the relevant experience here: not clause-by-clause authority, but knowing where the testable surface ends. The clause-depth work, the actual experiments, are where my own learning happens too. This is applied research, in public, by someone who has run the regulated organisations these standards govern, but who has not previously had the leverage to test the artifact-shaped subset of them against an agent at experimental scale. AI provides the leverage. Formicary is the work.</p>
+  <p>I have spent the last five years as VP of Information Systems and Product at Renalytix, leading the technology organisation behind an FDA De Novo-authorized AI diagnostic, running a software group under ISO 13485 and ISO 27001, and shipping production EHR integrations with major US health systems. I know which clauses of these standards live in artifacts and which live in management review meetings, because I have been audited under both. That is the relevant experience here: not clause-by-clause authority, but knowing where the testable surface ends. The clause-depth work, the actual experiments, are where my own learning happens too.</p>
+
+  <p>This is applied research, in public, by someone who has run the regulated organisations these standards govern, but who has not previously had the leverage to test the artifact-shaped subset of them against an agent at experimental scale. AI provides the leverage. Formicary is the work.</p>
 </div>
 
 <p class="masthead__byline" style="margin-top: var(--space-7);">Adrian Rossouw &nbsp;&middot;&nbsp; June 2026</p>
