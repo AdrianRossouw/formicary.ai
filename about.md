@@ -17,7 +17,7 @@ permalink: /about/
 %}
 
 <div class="prose" style="margin-top: var(--space-7);">
-  <p class="lede">Formicary is a set of small, public experiments on whether the artifact-shaped techniques regulated industries spent thirty years building do anything to make AI-written code hold up over time. It is applied research, run in the open, by someone who has had to live inside those standards.</p>
+  <p class="lede">Formicary is a set of small, public experiments on whether the artifact-shaped techniques regulated industries spent forty years building do anything to make AI-written code hold up over time. It is applied research, run in the open, by someone who has had to live inside those standards.</p>
 
   <p>I am Adrian Rossouw. For the last five years I was VP of Information Systems and Product at Renalytix, leading the technology organisation behind an FDA De Novo-authorized AI diagnostic, running a software group under ISO 13485 and ISO 27001, and shipping production EHR integrations with major US health systems. I have been audited under these standards.</p>
 
