@@ -296,7 +296,7 @@ p { text-wrap: pretty; }
 }
 
 /* standfirst — essay opening paragraph: italic, large, full ink */
-.standfirst {
+.prose .standfirst {
   font-size: clamp(1.45rem, 2.8vw, 1.85rem);
   font-style: italic;
   line-height: 1.42;
