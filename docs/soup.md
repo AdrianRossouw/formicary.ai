@@ -12,7 +12,7 @@ SOUP (Software of Unknown Provenance): external and third-party components used 
 | actions/upload-pages-artifact | `v3` | Packages `_site/` as the Pages deployment artifact | `.github/workflows/deploy.yml`; https://github.com/actions/upload-pages-artifact |
 | actions/deploy-pages | `v4` | Deploys the packaged artifact to GitHub Pages | `.github/workflows/deploy.yml`; https://github.com/actions/deploy-pages |
 | ruby/setup-ruby | `v1` | Installs Ruby and runs `bundle install` in the Actions runner | `.github/workflows/deploy.yml`; https://github.com/ruby/setup-ruby |
-| Scout Atom feed | Unpinned gist raw URL | External data source providing the live Scout feed. Fetched at runtime by the browser; not a build dependency. Content is untrusted and rendered as text only (REQ-004). | `assets/js/scout.js`; https://gist.githubusercontent.com/AdrianRossouw/8cd844ca87b6526ba6d74bf171c5a788/raw/feed.xml |
+| Scout Atom feed | Unpinned gist raw URL | External data source providing the live Scout feed. Fetched at runtime by the browser; not a build dependency. Content is untrusted and rendered as text only (REQ-004). | `assets/js/scout.js`; https://gist.githubusercontent.com/AdrianRossouw/10c94117666c5fd53b5abf087d38c6b3/raw/feed.xml |
 | Google Fonts | CDN, no version pin | Serves Newsreader, IBM Plex Sans, and IBM Plex Mono web fonts. Imported in `tokens.css`. Page degrades to fallback font stack if unavailable. | `assets/css/tokens.css`; https://fonts.googleapis.com |
 | Vitest | `^3.0` | JavaScript unit test runner for `tests/scout.test.js` | `package.json`; https://vitest.dev |
 | jsdom | via Vitest | DOM environment for unit-testing Scout card rendering without a browser | `vitest.config.js`; https://github.com/jsdom/jsdom |

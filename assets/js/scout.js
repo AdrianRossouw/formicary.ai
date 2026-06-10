@@ -1,6 +1,6 @@
 // Scout feed URL — unpinned gist raw endpoint (REQ-003)
 const FEED_URL =
-  'https://gist.githubusercontent.com/AdrianRossouw/8cd844ca87b6526ba6d74bf171c5a788/raw/feed.xml';
+  'https://gist.githubusercontent.com/AdrianRossouw/10c94117666c5fd53b5abf087d38c6b3/raw/feed.xml';
 
 const LABELS = { 5: 'Direct impact', 4: 'Highly relevant', 3: 'Worth tracking' };
 
